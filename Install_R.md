@@ -11,8 +11,8 @@ knitr::opts_chunk$set(message = FALSE)
 
 ### How to Install R Studio
 ##### Installation Steps **it is very important to install it in order, first R, then R Studio**:
-1. Install R from the download [link] (https://cran.r-project.org/mirrors.html). You can pick which one to choose, for example I chose the Duke Mirror <https://archive.linux.duke.edu/cran/>
-2. Install R Studio (free desktop version) **AFTER** you installed R, from the [link] (https://www.rstudio.com/products/rstudio/download/) <https://www.rstudio.com/products/rstudio/download/>. You will only use R Studio but need to have both on your computer.  
+1. Install R from the download [link](https://cran.r-project.org/mirrors.html). You can pick which one to choose, for example I chose the Duke Mirror <https://archive.linux.duke.edu/cran/>
+2. Install R Studio (free desktop version) **AFTER** you installed R, from the [link](https://www.rstudio.com/products/rstudio/download/) <https://www.rstudio.com/products/rstudio/download/>. You will only use R Studio but need to have both on your computer.  
 
 ##### How to use R Studio
 ###### Installing Packages
