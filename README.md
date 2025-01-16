@@ -44,7 +44,7 @@ This repository contains resources, exercises, and supporting materials for both
 
    or 
 
-2. Download each lecture markdown file.
+2. Download each [class exercise](https://github.com/aysedeniz09/Intro_Comp_Social_Science/tree/main/exercises) R markdown file.
 
 3. Follow the course schedule for weekly tasks and project deadlines.
 
