@@ -30,9 +30,9 @@ Welcome to the **Trending Insights: Social Data Analysis and Visualization** or 
 
 ## Repository Contents
 This repository contains resources, exercises, and supporting materials for both courses. Here’s what you’ll find:
-- **Lecture Slides:** Organized by week as R markdown scripts, supplemented with code examples for data analysis and visualization.
-- **Exercises:** Detailed instructions and datasets for practice.
-- **Cheat Sheets:** A compilation of R cheatsheet collected from external resources. 
+- [**Lecture Slides:**](https://github.com/aysedeniz09/Intro_Comp_Social_Science/tree/main/LectureSlides) Organized by week as R markdown scripts, supplemented with code examples for data analysis and visualization.
+- [**Exercises:**](https://github.com/aysedeniz09/Intro_Comp_Social_Science/tree/main/exercises) Detailed instructions and datasets for practice.
+- [**Cheat Sheets:**](https://github.com/aysedeniz09/Intro_Comp_Social_Science/tree/main/CheatSheets) A compilation of R cheatsheet collected from external resources. 
 
 ## Getting Started
 1. [Install R and R Studio](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/Install_R.md)
