@@ -1,13 +1,4 @@
----
-title: "Install_R_ADL"
-author: "Ayse D Lokmanoglu"
-output: html_document
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(message = FALSE)
-```
 
 ### How to Install R Studio
 ##### Installation Steps **it is very important to install it in order, first R, then R Studio**:
@@ -42,7 +33,7 @@ install.packages("ggthemes") #visualizations
 install.packages("scales") #visualizations
 install.packages("wesanderson") #visualizations
 ```
-4. Load installed packages into library
+6. Load installed packages into library
 ```{r}
 library(tidyverse)
 library(tidytext)
@@ -56,9 +47,9 @@ library(ggplot2)
 library(ggthemes)
 library(scales)
 library(wesanderson)
-````
-6.For help type ? followed by the *command* and *run*. For shortcuts in R Studio, please see the following [document](https://support.rstudio.com/hc/en-us/articles/200711853-Keyboard-Shortcuts-in-the-RStudio-IDE)
+```
+7. For help type ? followed by the *command* and *run*. For shortcuts in R Studio, please see the following [document](https://support.rstudio.com/hc/en-us/articles/200711853-Keyboard-Shortcuts-in-the-RStudio-IDE)
 ```{r}
 ?merge
 ```
-7. Now you are ready to work in R Studio! 
+8. Now you are ready to work in R Studio!
