@@ -10,17 +10,17 @@ Welcome to the **Trending Insights: Social Data Analysis and Visualization** or 
     <td>
 
 ### Course Overview (Masters)
-- **Level:** Master's Program  
+- **Level:** Master's  
 - **Focus:** Social Data Analysis, Visualization Techniques, and Trend Interpretation  
-- **Key Skills:** Data Wrangling, Statistical Modeling, Visualization Design, and Storytelling  
+- **Skills:** Data Wrangling, Statistical Modeling, Visualization Design, and Storytelling  
 
     </td>
     <td>
 
 ### Course Overview (PhD)
-- **Level:** PhD Program  
+- **Level:** PhD  
 - **Focus:** Text Mining, Natural Language Processing (NLP), and Automated Analysis  
-- **Key Skills:** Topic Modeling, Sentiment Analysis, Computational Textual Analysis, and Methodological Design  
+- **Skills:** Topic Modeling, Sentiment Analysis, Computational Textual Analysis, and Methodological Design  
 
     </td>
   </tr>
