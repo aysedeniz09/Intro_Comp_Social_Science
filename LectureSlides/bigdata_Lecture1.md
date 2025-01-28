@@ -107,21 +107,21 @@ print(z)
 
 ### RStudio: Script (continued)
 
-![](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/images/R_Script_1.png?raw=true)
+![](images/R_Script_1.png)
 
 ------------------------------------------------------------------------
 
 ### R Markdown in R Studio
 
-- [R Markdown](https://rstudio.github.io/cheatsheets/html/rmarkdown.html)
+- [R
+  Markdown](https://rstudio.github.io/cheatsheets/html/rmarkdown.html)
   is a framework that allows you to integrate code, output, and
   narrative in one document.
 - You can produce reports in multiple formats: HTML, PDF, Word, etc.
 
-Why do we use R Markdown?
-- Combine code and text for reproducible research.
-- Create interactive and visually appealing documents.
-- Easy to share analyses with others.
+Why do we use R Markdown? - Combine code and text for reproducible
+research. - Create interactive and visually appealing documents. - Easy
+to share analyses with others.
 
 [R Markdown Cheathseet](https://rmarkdown.rstudio.com/lesson-15.HTML)
 
@@ -206,13 +206,13 @@ print(x)
 
 ### Comments
 
-To comment
-- Comments are notes in the code that R ignores. Use `#` to write comments.
-- R only has single line comments so if you want multiple lines you need to repeat the `#` for each line.
+To comment - Comments are notes in the code that R ignores. Use `#` to
+write comments. - R only has single line comments so if you want
+multiple lines you need to repeat the `#` for each line.
 
 ``` r
 variable_2 <- "Leftward Assignment" ## this is the most common used by R coders
-# Other's work as well
+# Other's work as well 
 ```
 
 ------------------------------------------------------------------------
@@ -1053,6 +1053,9 @@ Rearrange rows based on column values.
 ``` r
 # Sort by Age in ascending order
 sorted_df <- df[order(df$Age), ]
+
+# Sort by Age in descending order
+sorted_df_desc <- df[order(-df$Age), ]
 ```
 
 **TRY: Sort rows by Name in alphabetical order.**
@@ -1077,14 +1080,11 @@ Compute summary statistics (e.g., mean, sum) for groups of data.
 **TRY:**
 
 ``` r
-# Example: Calculate mean Age by Student status
-result <- aggregate(Age ~ Professor, data = df, FUN = mean)
-print(result)
+# Example: Calculate mean Age 
+mean(df$Age)
 ```
 
-    ##   Professor Age
-    ## 1     FALSE  29
-    ## 2      TRUE  30
+    ## [1] 29.5
 
 **TRY: Try with other functions such as `max()`, `min()`, `sum()`, and
 others**
@@ -1380,8 +1380,10 @@ each session `library()`. Keep packages updated with
 [`Lubridate`](https://lubridate.tidyverse.org/) is a package that makes
 working with dates easier.
 
-- [`Lubridate` Cheat Sheet](https://rawgit.com/rstudio/cheatsheets/main/lubridate.pdf) 
-- It provides easy functions to parse, manipulate, and extract date-time components.
+- [`Lubridate` Cheat
+  Sheet](https://rawgit.com/rstudio/cheatsheets/main/lubridate.pdf) - It
+  provides easy functions to parse, manipulate, and extract date-time
+  components.
 
 ``` r
 install.packages("lubridate") # only once

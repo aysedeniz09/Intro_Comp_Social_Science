@@ -842,6 +842,8 @@ Rearrange rows based on column values.
 ```{r, eval=TRUE}
 # Sort by Age in ascending order
 sorted_df <- df[order(df$Age), ]
+
+# Sort by descending order
 ```
 
 **TRY: Sort rows by Name in alphabetical order.**
@@ -869,9 +871,8 @@ Compute summary statistics (e.g., mean, sum) for groups of data.
 **TRY:**
 
 ```{r, eval=TRUE}
-# Example: Calculate mean Age by Student status
-result <- aggregate(Age ~ Professor, data = df, FUN = mean)
-print(result)
+# Example: Calculate mean Age 
+mean(df$Age)
 
 ```
 
