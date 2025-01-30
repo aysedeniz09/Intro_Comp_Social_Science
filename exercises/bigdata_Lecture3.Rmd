@@ -932,6 +932,27 @@ webshot("tmp.html", "fig_1.png", delay = 5, vwidth = 480, vheight = 480)
 
 ------------------------------------------------------------------------
 
+### Class Exercise
+
+1. Load the Billboard dataset `head(billboard)`, which contains historical chart data for popular songs.
+2. Extract the `track` column, which contains song titles.
+3. Tokenize the song titles into individual words and count word frequencies.
+4. Generate a basic word cloud to visualize the most commonly used words in Billboard song titles.
+5. Filter out common stop words.
+6. Generate a refined word cloud after removing stop words and discuss the differences from the original version.
+7. Adjust the font size scale to emphasize frequently occurring words.
+8. Change the colors to use a predefined color palette instead of random colors.
+9. Modify the background color for better contrast and readability.
+10. Add word rotation to create a dynamic visual effect.
+11. Modify the shape of the word cloud to `circle`, or `star` to make it visually engaging.
+
+#### Bonus
+
+12. Filter the Billboard dataset by decade (e.g., songs from the 1990s vs. 2000s).
+13. Generate separate word clouds for different time periods using `date.entered` column and extracting year using `lubridate`'s `year()` and compare the most frequent words in song titles.
+
+---
+
 ### Lecture 3 Cheat Sheet
 
 | **Task** | **Description** | **Code Example** |

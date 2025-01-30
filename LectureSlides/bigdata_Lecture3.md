@@ -420,7 +420,7 @@ ggplot(top_words, aes(x = reorder(word, n), y = n, fill = book)) +
   theme_minimal()
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -518,7 +518,7 @@ ggplot(top_words, aes(x = reorder(word, n), y = n, fill = book)) +
   theme_minimal()
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -659,7 +659,7 @@ ggplot(top_tfidf, aes(x = reorder(word, tf_idf), y = tf_idf, fill = book)) +
   theme_minimal()
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -793,7 +793,7 @@ ggplot(data = mtcars, aes(x = factor(cyl), fill = factor(gear))) +
   labs(title = "Custom Colors Example (fill)")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -806,7 +806,7 @@ ggplot(data = mtcars, aes(x = factor(cyl), fill = factor(gear))) +
   labs(title = "Custom Color with National Park (fill)")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -819,7 +819,7 @@ ggplot(data = mtcars, aes(x = wt, y = mpg, color = factor(gear))) +
   labs(title = "Custom Color Example (color)")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -833,7 +833,7 @@ ggplot(data = mtcars, aes(x = wt, y = mpg, color = factor(gear))) +
   labs(title = "Custom Colors with Wes Anderson (color)")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -846,7 +846,7 @@ ggplot(data = mtcars, aes(x = factor(cyl), fill = factor(gear))) +
   labs(title = "ColorBrewer Palette Example (fill)")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -863,7 +863,7 @@ ggplot(data = mtcars, aes(x = wt, y = mpg, color = hp)) +
   )
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -877,7 +877,7 @@ ggplot(data = mtcars, aes(x = wt, y = mpg, color = hp)) +
   labs(title = "Continuous Gradient Example (color)")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -891,7 +891,7 @@ ggplot(data = mtcars, aes(x = wt, y = mpg, fill = hp)) +
   labs(title = "Diverging Gradient Example (color)")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -912,7 +912,7 @@ ggplot(top_words, aes(x = reorder(word, n), y = n, fill = book)) +
   theme_minimal()
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -956,7 +956,7 @@ word_freq <- original_books |>
 wordcloud2(data = word_freq, size = 0.5)
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -973,7 +973,7 @@ word_freq <- original_books |>
 wordcloud2(data = word_freq, size = 0.5)
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -996,7 +996,7 @@ wordcloud2(data = word_freq, size = 0.5)
 wordcloud2(data = word_freq, size = 0.5, color = "random-light")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
 
 ``` r
 # Use dark random colors
@@ -1019,13 +1019,13 @@ Adjust the range of font sizes `size` for words.
 wordcloud2(data = word_freq, size = 1) # Larger words
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
 
 ``` r
 wordcloud2(data = word_freq, size = 0.3) # Smaller words
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -1038,7 +1038,7 @@ visual effect.
 wordcloud2(data = word_freq, size = 0.5, minRotation = -pi/4, maxRotation = pi/4, rotateRatio = 0.3)
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -1048,7 +1048,7 @@ wordcloud2(data = word_freq, size = 0.5, minRotation = -pi/4, maxRotation = pi/4
 wordcloud2(data = word_freq, size = 0.5, color = "random-light", backgroundColor = "black")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -1062,7 +1062,7 @@ wordcloud2(data = word_freq, size = 0.5, color = "random-light", backgroundColor
 wordcloud2(data = word_freq, size = 0.5, shape = "star")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
 
 ``` r
 # Triangle shape
@@ -1079,7 +1079,7 @@ wordcloud2(
 )
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -1091,7 +1091,7 @@ wordcloud2(demoFreqC, size = 2, fontFamily = "微软雅黑",
            color = "random-light", backgroundColor = "grey")
 ```
 
-![](bigdata_L3_github_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
+![](bigdata_Lecture3_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -1116,6 +1116,36 @@ webshot("tmp.html", "fig_1.pdf", delay = 5, vwidth = 480, vheight = 480)
 # Save as PNG
 webshot("tmp.html", "fig_1.png", delay = 5, vwidth = 480, vheight = 480)
 ```
+
+------------------------------------------------------------------------
+
+### Class Exercise
+
+1.  Load the Billboard dataset `head(billboard)`, which contains
+    historical chart data for popular songs.
+2.  Extract the `track` column, which contains song titles.
+3.  Tokenize the song titles into individual words and count word
+    frequencies.
+4.  Generate a basic word cloud to visualize the most commonly used
+    words in Billboard song titles.
+5.  Filter out common stop words.
+6.  Generate a refined word cloud after removing stop words and discuss
+    the differences from the original version.
+7.  Adjust the font size scale to emphasize frequently occurring words.
+8.  Change the colors to use a predefined color palette instead of
+    random colors.
+9.  Modify the background color for better contrast and readability.
+10. Add word rotation to create a dynamic visual effect.
+11. Modify the shape of the word cloud to `circle`, or `star` to make it
+    visually engaging.
+
+#### Bonus
+
+12. Filter the Billboard dataset by decade (e.g., songs from the 1990s
+    vs. 2000s).
+13. Generate separate word clouds for different time periods using
+    `date.entered` column and extracting year using `lubridate`’s
+    `year()` and compare the most frequent words in song titles.
 
 ------------------------------------------------------------------------
 
