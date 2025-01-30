@@ -84,7 +84,7 @@ head(starbucks_user_data)
 
 From your computer
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 starbucks_user_data <- read_csv("data/Starbucks_User_Data.csv")
 head(starbucks_user_data)
 ```
@@ -394,7 +394,9 @@ print(df_separated)
 -   Combines multiple columns into a single column.
 -   Useful when you need to merge information for simplicity.
 
-**TRY: Combine Month and Year into Release_Date again**
+### <span style="color: purple;">Class Exercise</span>
+
+Use the movies df to separate the date
 
 ```{r, eval=TRUE}
 # Combine Month and Year into Release_Date again
@@ -648,6 +650,25 @@ ggplot(data = df, aes(x = Movie_Title, y = Total_Worldwide_Gross)) +
 ```
 
 ------------------------------------------------------------------------
+
+### <span style="color: purple;">Class Exercise</span>
+
+1. Create a scatter plot showing the relationship between `hp` (horsepower) and `mpg` (miles per gallon).
+2. Modify the scatter plot by:
+   - Changing point size based on `wt` (weight).
+   - Coloring points based on `cyl` (number of cylinders).
+   - Adjusting transparency (alpha) for better visibility.
+3. Create a bar chart showing how many cars belong to each `cyl` (number of cylinders) category.
+4. Customize the chart by:
+   - Changing the bar fill color.
+   - Adding axis labels and a title.
+   - Flipping the coordinates (`coord_flip()`) to make the bars horizontal.
+5. Create a line plot showing the trend of mpg (miles per gallon) as wt (weight) increases.
+6. Modify the line plot by:
+   - Changing the line color based on the number of cylinders (`cyl`).
+   - Adjusting line thickness for better visibility.
+
+----
 
 ####  6.4 Adjusting Labels with `labs()`
 

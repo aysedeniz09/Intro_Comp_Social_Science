@@ -110,19 +110,6 @@ starbucks_user_data <- read_csv("data/Starbucks_User_Data.csv")
 head(starbucks_user_data)
 ```
 
-    ## # A tibble: 6 × 16
-    ##   author_id conversation_id created_at          hashtag lang  like_count mention
-    ##       <dbl>           <dbl> <dttm>              <chr>   <chr>      <dbl> <chr>  
-    ## 1     30973         1.61e18 2022-12-27 15:43:16 <NA>    en            10 <NA>   
-    ## 2     30973         1.60e18 2022-11-29 05:23:55 <NA>    en             9 Mo_sha…
-    ## 3     30973         1.59e18 2022-11-28 20:14:09 <NA>    en             2 Mixxed…
-    ## 4     30973         1.60e18 2022-11-28 12:51:28 <NA>    en             0 BihhKa…
-    ## 5     30973         1.60e18 2022-11-27 15:14:26 <NA>    en             0 BihhKa…
-    ## 6     30973         1.60e18 2022-11-24 17:47:24 <NA>    en             1 therea…
-    ## # ℹ 9 more variables: quote_count <dbl>, referenced_status_id <dbl>,
-    ## #   referenced_user_id <dbl>, reply_count <dbl>, retweet_count <dbl>,
-    ## #   row_id <dbl>, status_id <dbl>, text <chr>, type <chr>
-
 ------------------------------------------------------------------------
 
 #### 1.2 You can also load it from your computer using R Studio Files
@@ -542,7 +529,9 @@ print(df_separated)
 - Combines multiple columns into a single column.
 - Useful when you need to merge information for simplicity.
 
-**TRY: Combine Month and Year into Release_Date again**
+### <span style="color: purple;">Class Exercise</span>
+
+Use the movies df to separate the date
 
 ``` r
 # Combine Month and Year into Release_Date again
@@ -755,7 +744,7 @@ ggplot(data = df, aes(x = China_Box_Office_Gross, y = US_Box_Office_Gross)) +
   theme_minimal()
 ```
 
-![](bigdata_L2_github_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](bigdata_Lecture2_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -813,7 +802,7 @@ ggplot(data = df, aes(x = China_Box_Office_Gross,
   theme_minimal()
 ```
 
-![](bigdata_L2_github_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](bigdata_Lecture2_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 **TRY: Change the shapes and colors**
 
@@ -833,7 +822,7 @@ ggplot(data = df, aes(x = Movie_Title, y = Total_Worldwide_Gross)) +
   theme_minimal()
 ```
 
-![](bigdata_L2_github_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](bigdata_Lecture2_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 **TRY: Change the colors**
 
@@ -854,7 +843,30 @@ ggplot(data = df, aes(x = Movie_Title, y = Total_Worldwide_Gross)) +
   theme_minimal()
 ```
 
-![](bigdata_L2_github_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+![](bigdata_Lecture2_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+
+------------------------------------------------------------------------
+
+### <span style="color: purple;">Class Exercise</span>
+
+1.  Create a scatter plot showing the relationship between `hp`
+    (horsepower) and `mpg` (miles per gallon).
+2.  Modify the scatter plot by:
+    - Changing point size based on `wt` (weight).
+    - Coloring points based on `cyl` (number of cylinders).
+    - Adjusting transparency (alpha) for better visibility.
+3.  Create a bar chart showing how many cars belong to each `cyl`
+    (number of cylinders) category.
+4.  Customize the chart by:
+    - Changing the bar fill color.
+    - Adding axis labels and a title.
+    - Flipping the coordinates (`coord_flip()`) to make the bars
+      horizontal.
+5.  Create a line plot showing the trend of mpg (miles per gallon) as wt
+    (weight) increases.
+6.  Modify the line plot by:
+    - Changing the line color based on the number of cylinders (`cyl`).
+    - Adjusting line thickness for better visibility.
 
 ------------------------------------------------------------------------
 
@@ -967,7 +979,7 @@ ggplot(data = df, aes(x = Movie_Title, y = Total_Worldwide_Gross)) +
   theme_minimal()
 ```
 
-![](bigdata_L2_github_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+![](bigdata_Lecture2_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -993,7 +1005,7 @@ ggplot(data = df, aes(x = Movie_Title, y = Total_Worldwide_Gross)) +
   theme_minimal()
 ```
 
-![](bigdata_L2_github_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+![](bigdata_Lecture2_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -1020,7 +1032,7 @@ ggplot(data = df, aes(x = China_Box_Office_Gross, y = US_Box_Office_Gross)) +
   theme_minimal()
 ```
 
-![](bigdata_L2_github_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+![](bigdata_Lecture2_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
@@ -1127,7 +1139,7 @@ ggplot(data = df_dates, aes(x = Release_Date_Parsed, y = Total_Worldwide_Gross))
   theme_minimal()
 ```
 
-![](bigdata_L2_github_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+![](bigdata_Lecture2_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
 
 ------------------------------------------------------------------------
 
