@@ -366,16 +366,20 @@ print(df_renamed)
 
 #### <span style="color: purple;">Class Exercise:</span>
 
-Use the movies dataset and perform the following:
+Use the movies dataset and perform the following operations, create a
+new dataframe for each:
 
 1.  `filter()`: Select movies with a total worldwide gross greater than
     \$500M.
 2.  `summarize()`: Compute the total gross for both China and the U.S.
 3.  `mutate()`: Add a new column for the profit (worldwide gross - U.S.
     gross).
-4.  Use `group_by()` and `summarize()` to calculate the average gross
-    per country.
-5.  Use `rename()` to rename columns
+
+Use `mtcars` dataset, create a new dataframe for each:
+
+4.  Use `group_by()` and `summarize()` to calculate the average `gear`
+    per `mpg` per country.
+5.  Use `rename()` to rename columns to whatever you want
 
 ------------------------------------------------------------------------
 
