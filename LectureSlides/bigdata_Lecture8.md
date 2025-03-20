@@ -153,10 +153,12 @@ To understand how different sentiment analysis lexicons classify text,
 we will compare results from multiple dictionaries, including **Bing**,
 **AFINN**, and **NRC**. Each lexicon provides different insights:
 
-- **Bing**: Binary classification (positive/negative sentiment).
-- **AFINN**: Numeric scores for sentiment intensity.
-- **NRC**: Categorizes words into emotional dimensions (anger, joy,
-  fear, etc.).
+- [**Bing**](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html):
+  Binary classification (positive/negative sentiment).
+- [**AFINN**](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010):
+  Numeric scores for sentiment intensity.
+- [**NRC**](http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm):
+  Categorizes words into emotional dimensions (anger, joy, fear, etc.).
 
 **Note: For AFINN you need to select 1 in your console**
 
@@ -538,7 +540,8 @@ between rare words more effectively.
 
 We will train a **Word2Vec model** on the Twitter dataset using both
 **Continuous Bag of Words (CBOW)** and **Skip-Gram** algorithms to
-analyze relationships between words.
+analyze relationships between words. For more on wordembeddings:
+<https://s-ai-f.github.io/Natural-Language-Processing/Word-embeddings.html>
 
 *Exercise is from
 <https://media.geeksforgeeks.org/wp-content/uploads/20231220164505/Screenshot-2023-12-20-164451.png>*
@@ -572,15 +575,15 @@ print("The CBOW embedding for election and vote is as follows ")
 print(cbow_embedding)
 ```
 
-    ##                 [,1]       [,2]       [,3]      [,4]         [,5]       [,6]
-    ## election -0.01524641  0.6053594 -0.1775241 0.7673076 -0.007543802 0.56196588
-    ## vote      0.71520901 -0.4168423  0.6384192 0.7130879  0.304585248 0.07003274
-    ##              [,7]      [,8]       [,9]      [,10]     [,11]      [,12]
-    ## election 1.008690 -1.353199 -0.4186174 -0.8467568 -1.431871 -0.7122827
-    ## vote     2.168427 -1.280406  0.5543106  0.2374510 -1.874247 -1.5952981
-    ##                [,13]      [,14]     [,15]
-    ## election -0.90659851 0.83281165 2.4255376
-    ## vote     -0.09820788 0.09743126 0.7203423
+    ##              [,1]      [,2]       [,3]       [,4]       [,5]      [,6]
+    ## election 1.894749 0.2181264 -1.2659570  0.2336746 -0.1040270 0.4802650
+    ## vote     1.273705 0.9546443  0.2664885 -0.5742556 -0.8250087 0.7215626
+    ##                [,7]       [,8]       [,9]      [,10]      [,11]    [,12]
+    ## election  0.8203883 -0.9974752 -0.3524837 0.05942797 -0.5151493 1.313092
+    ## vote     -0.4757605 -0.1427887 -0.7494671 1.60043454 -0.1478924 1.056508
+    ##               [,13]    [,14]      [,15]
+    ## election -0.4961722 1.849756 -1.4179113
+    ## vote     -0.6128002 2.269814 -0.9103643
 
 Step 4: Find look alikes
 
@@ -597,20 +600,20 @@ print(cbow_lookslike)
 ```
 
     ## $election
-    ##      term1    term2 similarity rank
-    ## 1 election  victory  0.9339065    1
-    ## 2 election   Warren  0.9093714    2
-    ## 3 election   letter  0.8989652    3
-    ## 4 election campaign  0.8948114    4
-    ## 5 election   Brexit  0.8927275    5
+    ##      term1     term2 similarity rank
+    ## 1 election     votes  0.9159456    1
+    ## 2 election   popular  0.8967494    2
+    ## 3 election       Dem  0.8837223    3
+    ## 4 election     swing  0.8835823    4
+    ## 5 election Wisconsin  0.8827486    5
     ## 
     ## $vote
     ##   term1   term2 similarity rank
-    ## 1  vote prevent  0.9268132    1
-    ## 2  vote   votes  0.9151853    2
-    ## 3  vote recount  0.8864434    3
-    ## 4  vote    file  0.8823794    4
-    ## 5  vote     GOP  0.8768997    5
+    ## 1  vote   votes  0.9263381    1
+    ## 2  vote   count  0.8998390    2
+    ## 3  vote million  0.8958079    3
+    ## 4  vote  voters  0.8800348    4
+    ## 5  vote   price  0.8706796    5
 
 #### 3.2.2 VisualizeCBOW
 
@@ -709,15 +712,15 @@ print("The SKIP Gram embedding for election and vote is as follows ")
 print(skip_embedding)
 ```
 
-    ##               [,1]      [,2]     [,3]       [,4]       [,5]       [,6]
-    ## election 0.4965941 1.3523093 2.829054 -0.1752094 -0.5944047 -0.7948645
-    ## vote     0.5168348 0.1261073 2.525361  0.4705346  0.2393071 -0.1764590
-    ##                [,7]       [,8]       [,9]       [,10]    [,11]    [,12]
-    ## election 0.73650002 -0.2708371 -0.8464981 -0.05689738 0.526140 1.284076
-    ## vote     0.04805911 -0.9441373 -0.7463317 -0.32007322 1.266062 1.480923
-    ##              [,13]      [,14]     [,15]
-    ## election 0.6628198 -0.3015004 0.3373322
-    ## vote     1.2981353 -0.2087997 0.9755821
+    ##                [,1]       [,2]        [,3]     [,4]      [,5]       [,6]
+    ## election -0.3449374 -0.1487328 -0.89616328 1.339456 -2.021222 -1.0644269
+    ## vote      0.2479456 -0.2773602 -0.02241817 1.485899 -1.352261 -0.7107126
+    ##               [,7]       [,8]      [,9]      [,10]     [,11]      [,12]
+    ## election -1.299745 -0.5413478 -2.049849 -0.3209173 0.7960896 -0.0746556
+    ## vote     -1.525412 -1.1554497 -1.194604  0.3627259 1.8351189  1.2914233
+    ##                [,13]      [,14]       [,15]
+    ## election -0.09158918  0.3199549 -0.07709639
+    ## vote      0.20865631 -0.1267121  0.06206461
 
 Step 4: Find the similar context words that are nearest in meaning by
 using the `predict()` method and provide the type as nearest.
@@ -736,20 +739,20 @@ print(skip_lookslike)
 ```
 
     ## $party
-    ##   term1        term2 similarity rank
-    ## 1 party     allowing  0.9375591    1
-    ## 2 party          Bay  0.9359705    2
-    ## 3 party        visit  0.9302973    3
-    ## 4 party          at…  0.9295075    4
-    ## 5 party presidential  0.9105116    5
+    ##   term1   term2 similarity rank
+    ## 1 party      in  0.9385897    1
+    ## 2 party donated  0.9363709    2
+    ## 3 party     set  0.9352309    3
+    ## 4 party      by  0.9350064    4
+    ## 5 party    over  0.9314415    5
     ## 
     ## $election
-    ##      term1        term2 similarity rank
-    ## 1 election        swing  0.9507335    1
-    ## 2 election presidential  0.9491863    2
-    ## 3 election         pres  0.9433998    3
-    ## 4 election   corruption  0.9429368    4
-    ## 5 election      mention  0.9339147    5
+    ##      term1   term2 similarity rank
+    ## 1 election victory  0.9326200    1
+    ## 2 election    Dems  0.9260718    2
+    ## 3 election  voters  0.9258286    3
+    ## 4 election    hasn  0.9252130    4
+    ## 5 election mention  0.9228504    5
 
 Step 5: Create new embeddings for the words_list. And then draw the
 visualization.

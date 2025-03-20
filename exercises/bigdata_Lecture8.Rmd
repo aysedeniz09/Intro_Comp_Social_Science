@@ -139,9 +139,9 @@ To understand how different sentiment analysis lexicons classify text,
 we will compare results from multiple dictionaries, including **Bing**,
 **AFINN**, and **NRC**. Each lexicon provides different insights:
 
--   **Bing**: Binary classification (positive/negative sentiment).
--   **AFINN**: Numeric scores for sentiment intensity.
--   **NRC**: Categorizes words into emotional dimensions (anger, joy,
+-   [**Bing**](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html): Binary classification (positive/negative sentiment).
+-   [**AFINN**](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010): Numeric scores for sentiment intensity.
+-   [**NRC**](http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm): Categorizes words into emotional dimensions (anger, joy,
     fear, etc.).
 
 **Note: For AFINN you need to select 1 in your console**
@@ -409,6 +409,7 @@ between rare words more effectively.
 We will train a **Word2Vec model** on the Twitter dataset using both
 **Continuous Bag of Words (CBOW)** and **Skip-Gram** algorithms to
 analyze relationships between words.
+For more on wordembeddings: https://s-ai-f.github.io/Natural-Language-Processing/Word-embeddings.html 
 
 *Exercise is from
 <https://media.geeksforgeeks.org/wp-content/uploads/20231220164505/Screenshot-2023-12-20-164451.png>*

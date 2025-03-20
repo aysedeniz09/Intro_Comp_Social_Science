@@ -1,0 +1,56 @@
+---
+title: "Text as Data: Topic Modeling"
+subtitle: "COM EM757"
+author: "Dr. Ayse D. Lokmanoglu"
+date: 'Lecture 9, (B) March 26, (A) March 31'
+output: github_document
+always_allow_html: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE
+)
+```
+
+# R Exercises
+
+------------------------------------------------------------------------
+
+**ALWAYS** Let's load our libraries
+
+```{r}
+library(tidyverse)
+library(tidytext)
+library(ggplot2)
+library(stopwords)
+library(ldatuning)
+library(dplyr)
+```
+
+## 1. Intro to Topic Modeling
+
+Topic modeling is an unsupervised machine learning technique that identifies latent themes in a collection of text documents. The most widely used approach is Latent Dirichlet Allocation (LDA), which assumes each document is a mixture of topics, and each topic is a mixture of words.
+
+Why Use LDA?
+- Helps uncover hidden structure in large text corpora
+- Organizes vast amounts of text into interpretable themes
+- Useful for content analysis, social media monitoring, and recommendation systems
+
+LDA vs. STM
+- LDA (Latent Dirichlet Allocation): A probabilistic model that assigns words to topics based on co-occurrence patterns.
+- STM (Structural Topic Modeling): Extends LDA by allowing the inclusion of metadata (e.g., date, author) to influence topic distribution.
+
+---
+
+## 2. Preprocessing Text Data
+
+
+
+
+
