@@ -50,7 +50,159 @@ LDA vs. STM
 
 ## 2. Preprocessing Text Data
 
+2.1. Download the data from [GitHub](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/data/White_Lotus.Rda). 
+2.2. Save the data to the folder where your script is (in mine it is saved under data folder in the main directory, so I say first go to the main directory with .. then to the data folder).
+2.3. Load the data
+
+```{r}
+load("../data/White_Lotus.Rda")
+```
+
+2.4. Let's take a look at the data
+
+```{r}
+str(data)
+```
+
+**Note: The data already has a post_index column and a language filtering. I am putting that code below so that you can run it on your own in the future.**
+
+2.5. Index, save text and language filtering, remove duplicates
+
+```{r}
+data$post_index <- seq_len(nrow(data)) #my index column
+data$textBU <- data$text # text backup
+
+data$CLD2<-cld2::detect_language(data$text) ## a package by Google
+table(data$CLD2)
+data2 <- data |>  filter(CLD2=="en")
+data3 <- data2 |> 
+  distinct(text, .keep_all = TRUE)
+
+```
+
+---
+
+## 3. Tokenization and Stopword Removal
+
+3.1. You can see I am using 2 stopwords lists. 
+```{r}
+mystopwords<-c(stopwords("en"),stopwords(source = "smart"),
+               "thewhitelotus")
+
+mystopwords <- unique(mystopwords)
+mystopwords <- tolower(mystopwords)
+```
+
+3.2. Tidy Tokens
+
+```{r}
+# creating tidy tokens
+tidy_data <- data3 |> 
+  unnest_tokens(word, text) |>  # tokenizing
+  anti_join(data.frame(word=mystopwords)) |> 
+  mutate(nchar=nchar(word)) |>  #counting the number of letters
+  filter(nchar>2) |>  # remove from minumum number of chars
+  filter(!grepl("[0-9]{1}", word)) |>  # removing numbers 
+  filter(!grepl("\\W", word))  # removing any word containing non letter/number 
+
+```
+
+3.3. TF-IDF (remember from [Lecture 3](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/LectureSlides/bigdata_Lecture3.md))
+
+```{r}
+# choosing top words by tf-idf
+maxndoc=0.5
+minndoc=0.00001
+
+# filter to tokens not too common and not too rare
+templength<-length(unique(tidy_data$post_index))
+good_common_words <- tidy_data |> 
+  count(post_index, word, sort = TRUE) |> 
+  group_by(word) |> 
+  summarize(doc_freq=n()/templength) |> 
+  filter(doc_freq<maxndoc) |> 
+  filter(doc_freq>minndoc)
+```
+
+3.4 Clean tidy and check the top words to see if we want to go back to Step 3.1 and add other stopwords
+
+```{r}
+# clean tidy to fit the tokens - NOTE: this is where you might lost indexes
+tidy_data_pruned <- tidy_data |>  inner_join(good_common_words)
+tidy_data_pruned |> 
+  group_by(word) |> 
+  summarise(n=n()) |> 
+  arrange(desc(n)) |> 
+  mutate(word = reorder(word, n)) |> 
+  top_n(75) |>     
+  ggplot(aes(n, word)) +
+  geom_col() +
+  labs(y = NULL)
+```
+
+If we are happy with the stopwords continue to next step
+
+3.5 Term Document
+
+```{r}
+# DFM-ing it
+tidy_dfm <- tidy_data_pruned |> 
+  count(post_index, word) |> 
+  cast_dfm(post_index, word, n)
+```
+
+3.5.1 Check the dimensions
+
+```{r}
+tidy_dfm@Dim
+```
+
+You can see we lost some rows in pruning the data!!
+
+3.6 Convert to LDA object, clean your space and save your R image!!
+
+```{r}
+full_data<- convert(tidy_dfm, to = "topicmodels")
+rm(good_common_words, tidy_data, tidy_data_pruned, tidy_dfm, maxndoc, minndoc, templength)
+
+save.image("../data/Lecture9_post-tidy-presearchk.rdata")
+```
+
+## 4. Finding the Optimal Number of Topics (K)
+
+4.1 [Ldatuning](https://github.com/nikita-moor/ldatuning) Package
+
+*This takes time and effort so I will show you the results, you can do it yourself at home!*
+
+```{r}
+
+mycores<-detectCores()-2 # we are leaving 2 cores of your computer free so you can run a processor
+# we will try several k's (sequence from 5 to 100)
+
+Sys.time()
+result <- FindTopicsNumber(
+  full_data,
+  topics = seq(5,100,by=5), # Specify how many topics you want to try.
+  metrics = c("Griffiths2004", "CaoJuan2009", "Arun2010", "Deveaud2014"),
+  method = "Gibbs",
+  control = list(seed = 3333),
+  mc.cores = mycores, # Specify the number of cores that you computer has to achieve the best performance. 
+  verbose = TRUE
+)
+Sys.time()
+
+save.image("../data/Lecture9_post-searchk.rdata")
+
+```
+
+*Download the new data if you want to see the visualization, if not you can continue without running this
 
 
+```{r}
+load("../data/Lecture9_post-searchk.rdata")
+
+FindTopicsNumber_plot(result)  
+ggsave("../images/FindK_Results_upto100.jpeg", bg="white", width=12, height=8, dpi=300)
 
 
+```
