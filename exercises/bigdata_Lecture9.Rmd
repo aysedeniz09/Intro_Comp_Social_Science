@@ -676,6 +676,9 @@ We will be using the [`stm` package](https://github.com/bstewart/stm).
 Our class example will be our White Lotus Data, and our covariate will
 be year of the posts.
 
+Load the data from:
+[Link](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/data/Lecture9_stm_AllData.Rdata)
+
 #### 6.1.1 Preprocess Data:
 
 First exact same steps as LDA
