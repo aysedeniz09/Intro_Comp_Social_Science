@@ -90,20 +90,15 @@ LDA vs. STM
 
 ### 2.1 Download the data from
 
-[GitHub](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/data/White_Lotus.Rda).
-
-#### 2.1.2 Save the data to the folder where your script is (in mine it is
-
-saved under data folder in the main directory, so I say first go to the
-main directory with .. then to the data folder).
-
-#### 2.1.3 Load the data
-
 *Download the new data from
-[Github](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/data/Lecture9_post-LDAk40.rdata)*
+[Github](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/data/Lecture9_post-LDAk40.rdata)
+
+#### 2.1.2 Save the data to the folder where your script is 
+In mine it is saved under data folder in the main directory, so I say first go to the main directory with .. then to the data folder).
+
 
 ```{r}
-load("../data/Lecture9_post-LDAk40.rdata")
+load("../data/Lecture9_post-LDAk40.Rdata")
 ```
 
 ------------------------------------------------------------------------
