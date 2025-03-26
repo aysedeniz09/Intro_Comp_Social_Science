@@ -31,44 +31,98 @@ library(ggplot2)
 library(stopwords)
 library(ldatuning)
 library(dplyr)
+library(quanteda)
+library(stm)
+library(topicmodels)
+
 ```
 
 ## 1. Intro to Topic Modeling
 
-Topic modeling is an unsupervised machine learning technique that identifies latent themes in a collection of text documents. The most widely used approach is Latent Dirichlet Allocation (LDA), which assumes each document is a mixture of topics, and each topic is a mixture of words.
+Topic modeling is an unsupervised machine learning technique that
+identifies latent themes in a collection of text documents. The most
+widely used approach is Latent Dirichlet Allocation (LDA), which assumes
+each document is a mixture of topics, and each topic is a mixture of
+words.
 
-Why Use LDA?
-- Helps uncover hidden structure in large text corpora
-- Organizes vast amounts of text into interpretable themes
-- Useful for content analysis, social media monitoring, and recommendation systems
+Why Use LDA? - Helps uncover hidden structure in large text corpora -
+Organizes vast amounts of text into interpretable themes - Useful for
+content analysis, social media monitoring, and recommendation systems
+
+![](https://www.tidytextmining.com/images/tmwr_0601.png) *image from:
+<https://www.tidytextmining.com/topicmodeling>*
+
+-   Latent Dirichlet Allocation (LDA) is one of the most widely used
+    algorithms for topic modeling. Without delving into the complex
+    mathematics behind it, we can conceptualize LDA through two key
+    principles:
+    1.  Every document is a mixture of topics. Each document contains
+        words from multiple topics in different proportions. For
+        instance, in a model with two topics, we could say:
+        -   "Document 1 is 80% Topic A and 20% Topic B."
+        -   "Document 2 is 40% Topic A and 60% Topic B."
+    2.  Every topic is a mixture of words. Each topic consists of words
+        that commonly appear together. For example, in a two-topic model
+        focused on news:
+        -   The politics topic might include words like policy,
+            elections, and laws.
+        -   The sports topic might contain words such as soccer,
+            basketball, and tournament.
+        -   Some words, like race, may appear in both topics but with
+            different frequencies.
+-   LDA uses a probabilistic approach to simultaneously determine the
+    composition of topics within each document and the key words that
+    define each topic. This method enables us to uncover hidden themes
+    in large text datasets without prior labeling.
 
 LDA vs. STM
-- LDA (Latent Dirichlet Allocation): A probabilistic model that assigns words to topics based on co-occurrence patterns.
-- STM (Structural Topic Modeling): Extends LDA by allowing the inclusion of metadata (e.g., date, author) to influence topic distribution.
 
----
+-   LDA (Latent Dirichlet Allocation): A probabilistic model that
+    assigns words to topics based on co-occurrence patterns.
+
+-   STM (Structural Topic Modeling): Extends LDA by allowing the
+    inclusion of metadata (e.g., date, author) to influence topic
+    distribution.
+
+------------------------------------------------------------------------
 
 ## 2. Preprocessing Text Data
 
-2.1. Download the data from [GitHub](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/data/White_Lotus.Rda). 
-2.2. Save the data to the folder where your script is (in mine it is saved under data folder in the main directory, so I say first go to the main directory with .. then to the data folder).
-2.3. Load the data
+### 2.1 Download the data from
+
+[GitHub](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/data/White_Lotus.Rda).
+
+#### 2.1.2 Save the data to the folder where your script is (in mine it is
+
+saved under data folder in the main directory, so I say first go to the
+main directory with .. then to the data folder).
+
+#### 2.1.3 Load the data
+
+*Download the new data from
+[Github](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/data/Lecture9_post-LDAk40.rdata)*
 
 ```{r}
-load("../data/White_Lotus.Rda")
+load("../data/Lecture9_post-LDAk40.rdata")
 ```
 
-2.4. Let's take a look at the data
+------------------------------------------------------------------------
+
+### 2.2 Let's take a look at the data
 
 ```{r}
 str(data)
 ```
 
-**Note: The data already has a post_index column and a language filtering. I am putting that code below so that you can run it on your own in the future.**
+**Note: The data already has a post_index column and a language
+filtering. I am putting that code below so that you can run it on your
+own in the future.**
 
-2.5. Index, save text and language filtering, remove duplicates
+------------------------------------------------------------------------
 
-```{r}
+### 2.3 Index, save text and language filtering, remove duplicates
+
+```{r, eval=FALSE}
 data$post_index <- seq_len(nrow(data)) #my index column
 data$textBU <- data$text # text backup
 
@@ -80,11 +134,12 @@ data3 <- data2 |>
 
 ```
 
----
+------------------------------------------------------------------------
 
 ## 3. Tokenization and Stopword Removal
 
-3.1. You can see I am using 2 stopwords lists. 
+### 3.1 You can see I am using 2 stopwords lists.
+
 ```{r}
 mystopwords<-c(stopwords("en"),stopwords(source = "smart"),
                "thewhitelotus")
@@ -93,7 +148,9 @@ mystopwords <- unique(mystopwords)
 mystopwords <- tolower(mystopwords)
 ```
 
-3.2. Tidy Tokens
+------------------------------------------------------------------------
+
+### 3.2 Tidy Tokens
 
 ```{r}
 # creating tidy tokens
@@ -107,7 +164,11 @@ tidy_data <- data3 |>
 
 ```
 
-3.3. TF-IDF (remember from [Lecture 3](https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/LectureSlides/bigdata_Lecture3.md))
+------------------------------------------------------------------------
+
+### 3.3 TF-IDF (remember from [Lecture
+
+3](<https://github.com/aysedeniz09/Intro_Comp_Social_Science/blob/main/LectureSlides/bigdata_Lecture3.md>))
 
 ```{r}
 # choosing top words by tf-idf
@@ -124,11 +185,18 @@ good_common_words <- tidy_data |>
   filter(doc_freq>minndoc)
 ```
 
-3.4 Clean tidy and check the top words to see if we want to go back to Step 3.1 and add other stopwords
+------------------------------------------------------------------------
+
+### 3.4 Clean tidy and check the top words to see if we want to go back to
+
+Step 3.1 and add other stopwords
 
 ```{r}
 # clean tidy to fit the tokens - NOTE: this is where you might lost indexes
 tidy_data_pruned <- tidy_data |>  inner_join(good_common_words)
+```
+
+```{r}
 tidy_data_pruned |> 
   group_by(word) |> 
   summarise(n=n()) |> 
@@ -142,7 +210,9 @@ tidy_data_pruned |>
 
 If we are happy with the stopwords continue to next step
 
-3.5 Term Document
+------------------------------------------------------------------------
+
+### 3.5 Term Document
 
 ```{r}
 # DFM-ing it
@@ -159,22 +229,27 @@ tidy_dfm@Dim
 
 You can see we lost some rows in pruning the data!!
 
-3.6 Convert to LDA object, clean your space and save your R image!!
+------------------------------------------------------------------------
+
+### 3.6 Convert to LDA object, clean your space and save your R image!!
 
 ```{r}
 full_data<- convert(tidy_dfm, to = "topicmodels")
+```
+
+```{r}
 rm(good_common_words, tidy_data, tidy_data_pruned, tidy_dfm, maxndoc, minndoc, templength)
 
-save.image("../data/Lecture9_post-tidy-presearchk.rdata")
 ```
 
 ## 4. Finding the Optimal Number of Topics (K)
 
-4.1 [Ldatuning](https://github.com/nikita-moor/ldatuning) Package
+### 4.1 [Ldatuning](https://github.com/nikita-moor/ldatuning) Package
 
-*This takes time and effort so I will show you the results, you can do it yourself at home!*
+*This takes time and effort so I will show you the results, you can do
+it yourself at home!*
 
-```{r}
+```{r, eval=FALSE}
 
 mycores<-detectCores()-2 # we are leaving 2 cores of your computer free so you can run a processor
 # we will try several k's (sequence from 5 to 100)
@@ -191,18 +266,903 @@ result <- FindTopicsNumber(
 )
 Sys.time()
 
-save.image("../data/Lecture9_post-searchk.rdata")
-
 ```
-
-*Download the new data if you want to see the visualization, if not you can continue without running this
-
 
 ```{r}
-load("../data/Lecture9_post-searchk.rdata")
-
 FindTopicsNumber_plot(result)  
-ggsave("../images/FindK_Results_upto100.jpeg", bg="white", width=12, height=8, dpi=300)
-
+# ggsave("../images/FindK_Results_upto100.jpeg", bg="white", width=12, height=8, dpi=300) ## this is how to save the image
 
 ```
+
+So what do we think the number of topics we should try is?
+
+| Metric | Optimization Goal | Visualization | e.g. from our Results |
+|-----------------|-----------------|-----------------|--------------------|
+| **Griffiths2004** | **Maximize** | Bottom panel, circles | Peaks around **40–50** topics before plateauing. |
+| **Deveaud2014** | **Maximize** | Bottom panel, plus signs | Decreases, suggesting **lower values** indicate worse coherence. Lower topic numbers are better. |
+| **CaoJuan2009** | **Minimize** | Top panel, triangles | Steadily decreases, stabilizing around **40–50** topics. |
+| **Arun2010** | **Minimize** | Top panel, squares | Should be minimized; flattens around **40** topics. |
+
+So what do we think? Let's try 35, 40 and 50 topics!
+
+------------------------------------------------------------------------
+
+## 5. LDA Model
+
+LDA converts the document-word matrix (we had above as `tidy_dfm`) into
+two other matrices: 1. Topic-Word matrix (Beta (β)) 2. Document-Topic
+matrix (Gamma (γ))
+
+![](https://cdn.analyticsvidhya.com/wp-content/uploads/2021/06/26864dtm.webp)
+
+*image from:
+<https://cdn.analyticsvidhya.com/wp-content/uploads/2021/06/26864dtm.webp>*.
+
+### 5.1 Train the LDA Model with the optimal topics
+
+```{r, eval=FALSE}
+whitelotus_LDA_40 <- LDA(full_data, 
+                         k = 40, 
+                         method = "Gibbs",
+                         control = list(verbose=500, 
+                                        seed = 9898)) ### we set seed for reproducibility
+# save.image("../data/Lecture9_post-LDAk40.rdata")
+```
+
+#### 5.1.1 Let's look inside the LDA model
+
+```{r}
+str(whitelotus_LDA_40)
+```
+
+We are interested in `@terms`, `@documents`, `@beta` & `@gamma`.
+
+------------------------------------------------------------------------
+
+### 5.2 The Beta & Gamma Matrices
+
+-   Beta (β) : The per-topic-per-word probabilities. Beta is the
+    proportion of the topic that is made up of words from the
+    vocabulary.
+-   Gamma (γ): The per-document-per-topic probability. Gamma is the
+    proportion of the document that is made up of words from the
+    assigned topic.
+
+------------------------------------------------------------------------
+
+#### 5.2.1 Top Words per Topic - The Beta (β) Matrix using Tidy
+
+```{r}
+WL_topics <- tidy(whitelotus_LDA_40, matrix = "beta")
+head(WL_topics)
+
+```
+
+How do we interpret this: The word charisma has: - **Topic 1:**
+$5.353692 \times 10^{-6}$ - **Topic 2:** $6.625281 \times 10^{-6}$ -
+**Topic 3:** $7.932290 \times 10^{-6}$ - **Topic 4:**
+$6.143374 \times 10^{-6}$ - **Topic 5:** $5.806291 \times 10^{-6}$ -
+**Topic 6:** $1.694387 \times 10^{-4}$ - ... till **Topic 40**
+
+In order to get the highest probabilities we can use `slice_max()`
+
+```{r}
+WL_top_terms <- WL_topics |> 
+  group_by(topic) |> 
+  slice_max(beta, n = 10) |> 
+  ungroup() |> 
+  arrange(topic, -beta)
+
+WL_top_terms |> 
+  filter(topic < 10) |> ## for visualization purposes
+  mutate(term = reorder_within(term, beta, topic)) |> 
+  ggplot(aes(beta, term, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  scale_y_reordered()
+```
+
+We can also identify distinguishing terms between two topics, by
+pivoting wider from topics, computing the logarithmic ratio ---\> which
+tells us how much more a word is associated with topic 2 versus topic 1,
+i.e.,: - log_ratio \> 0 → word is more associated with topic 2 -
+log_ratio \< 0 → word is more associated with topic 1
+
+```{r}
+beta_wide <- WL_topics |> 
+  mutate(topic = paste0("topic", topic)) |> ## add topic before number since you cannot have numeric column names in R
+  pivot_wider(names_from = topic, values_from = beta) |>   # Pivot the data wider: each topic becomes a separate column with its beta
+  filter(topic1 > .001 | topic2 > .001) |> # Keep only rows (terms) that have non-negligible presence in either topic1 or topic2
+  mutate(log_ratio = log2(topic2 / topic1))  # Calculate the log ratio of topic2 to topic1
+
+head(beta_wide)
+```
+
+Visualize it:
+
+```{r}
+
+beta_wide |> 
+  dplyr::filter(log_ratio > -7.5 & log_ratio < 7.5) |> ## make the viusalization more readable
+  ggplot( aes(x = log_ratio, y = reorder(term, log_ratio))) +
+  geom_col() +
+  labs(
+    x = "Log2 ratio of beta in topic 2 / topic 1",
+    y = NULL,
+    title = "Terms between Topic 1 and Topic 2"
+  ) +
+  theme_minimal()
+
+```
+
+------------------------------------------------------------------------
+
+#### 5.2.2 Top Words per Topic - The Beta (β) Matrix using Base R
+
+```{r}
+mybeta<-data.frame(whitelotus_LDA_40@beta)
+# head(mybeta)
+```
+
+Now we need to add column names and row names
+
+```{r}
+# the number of rows in the mybeta matrix
+nrow(mybeta)  # the number of terms in the topic-word distribution matrix
+
+# the number of columns in the mybeta matrix
+ncol(mybeta)  # the number of topics in the model
+
+# assign column names to mybeta using the terms from the LDA model
+colnames(mybeta) <- whitelotus_LDA_40@terms  # Each column represents a topic, and we label them with the words
+
+# transpose the mybeta matrix so that words become rows and topics become columns
+mybeta <- t(mybeta)  # now rows represent topics and columns represent words
+
+# apply the exponential function to each element of the matrix
+mybeta <- exp(mybeta)  # Converts log probabilities to actual probability values
+
+head(mybeta)
+```
+
+We can display using wordcloud:
+
+```{r}
+# Select a topic index for visualization
+i = 4  # Choose a random topic (Topic 4 in this case)
+
+# Create a data frame of words and their probabilities for the selected topic
+wordfreq <- data.frame(word = rownames(mybeta), freq = mybeta[, i])
+
+# Generate a word cloud to visualize word importance in Topic 4
+wordcloud2::wordcloud2(wordfreq)  # Larger words indicate higher probability in the topic
+
+# Apply a transformation to reduce the impact of highly frequent words
+wordfreq <- data.frame(word = rownames(mybeta), freq = (mybeta[, i])^(0.3))  
+# Raising probabilities to the power of 0.3 reduces the range, making less frequent words more visible
+
+# Generate another word cloud with adjusted scaling
+wordcloud2::wordcloud2(wordfreq)  # Helps to balance word size differences
+```
+
+------------------------------------------------------------------------
+
+#### 5.2.3 Top Documents per Topic - The Gamma (γ) Matrix using Tidy
+
+```{r}
+WL_documents <- tidy(whitelotus_LDA_40, matrix = "gamma")
+head(WL_documents)
+```
+
+How do we interpret this? - Each value in this table shows the
+**estimated proportion of words in a specific document that are
+attributed to a specific topic**. This comes from the **gamma matrix**
+of the LDA model, which gives the document-topic distribution. In our
+case, e.g. the `head()`:
+
+-   **Document 1**: $\gamma_{1,1} = 0.02016129$\
+-   **Document 2**: $\gamma_{2,1} = 0.02960526$\
+-   **Document 3**: $\gamma_{3,1} = 0.01953125$\
+-   **Document 4**: $\gamma_{4,1} = 0.02016129$\
+-   **Document 5**: $\gamma_{5,1} = 0.03879310$\
+-   **Document 6**: $\gamma_{6,1} = 0.02358491$
+
+This means, for example, that **approximately 2% of the words in
+Document 1** are estimated to be generated from **Topic 1**, while
+**Document 5** has a slightly stronger association with Topic 1 (about
+**3.9%** of its words).
+
+Visualization - we can boxplot according to documents
+
+```{r}
+WL_documents |> 
+  mutate(document = as.numeric(document)) |> 
+  filter(document < 5 & topic < 4) |>  #again for visualization 
+  ggplot(aes(factor(topic), gamma)) +
+  geom_boxplot() +
+  facet_wrap(~ document) +
+  labs(x = "topic", y = expression(gamma))
+
+```
+
+------------------------------------------------------------------------
+
+#### 5.2.4 Top Documents per Topic - The Gamma (γ) Matrix using Base R
+
+Because we **pruned** the data-set before term document matrix, we need
+to make sure we remove the documents we deleted
+
+```{r}
+nrow(whitelotus_LDA_40@gamma)
+ncol(whitelotus_LDA_40@gamma)
+
+nrow(data3) - nrow(whitelotus_LDA_40@gamma)
+
+```
+
+So we pruned 128 documents, so lets create a short dataframe
+
+```{r}
+data_short<-data3
+missing_docs<-setdiff(data3$post_index,whitelotus_LDA_40@documents)
+length(missing_docs) ### so its the same
+
+data_short<-data_short[-which(data_short$post_index %in% missing_docs),]
+nrow(data_short) - nrow(whitelotus_LDA_40@gamma)## great
+
+```
+
+Now let's combine the gamma values with our main document to have the
+text and the gamma values
+
+```{r}
+
+meta_theta_df<-cbind(data_short, whitelotus_LDA_40@gamma)
+
+### I will also add an X before all the topic names
+
+col1 = which(names(meta_theta_df) == "1") #first topic
+col40 = which(names(meta_theta_df) == "40") #last topic
+
+
+colnames(meta_theta_df)[col1:col40] <- paste0("X", colnames(meta_theta_df)[col1:col40]) #you can also paste topic_ here or whatever you want
+colnames(meta_theta_df)
+
+```
+
+For example, we can do theme by day, and visualize theme by day
+
+```{r}
+meta_theta_daily <- meta_theta_df |> 
+  pivot_longer(cols = starts_with("X"), names_to = "topic", values_to = "gamma") |>
+  group_by(date, topic) |> 
+  summarise(mean_gamma = mean(gamma), .groups = "drop") |> 
+  ungroup()
+
+
+meta_theta_daily |> 
+  filter(topic %in% (
+    meta_theta_daily |> 
+      group_by(topic) |> 
+      summarise(avg = mean(mean_gamma), .groups = "drop") |> 
+      slice_max(order_by = avg, n = 5) |> 
+      pull(topic)
+  )) |> 
+  ggplot(aes(x=date))+
+  geom_col(aes(y=mean_gamma,fill=topic),position = "fill",width = 4)+
+  scale_x_date(date_breaks="2 months", date_labels = "%b-%Y")+
+  xlab("")+
+  ylab("Prevalance")+
+  ggthemes::theme_wsj(color="white")+
+  theme(text=element_text(size=10,family="Times"),
+        title=element_text(size=10,family="Times"),
+        axis.text.x=element_text(angle=60, size=8, hjust=1, family="Times"),
+        axis.text.y=element_text(size=8, family="Times"),
+        axis.title.x=element_text(vjust=-0.25, size=8, family="Times"),
+        axis.title.y=element_text(vjust=-0.25, size=8, family="Times"),
+        legend.position="bottom", legend.box="vertical", legend.margin=margin(),
+        legend.key = element_rect(fill="white"), legend.background = element_rect(fill=NA),
+        legend.text=element_text(size=8, family="Times"))
+
+```
+
+Or another way
+
+```{r}
+
+theme_by_date <- meta_theta_df |> 
+  group_by(date) |> 
+  summarise(across(starts_with("X"), mean))
+
+ggplot(theme_by_date, aes(x=date))+
+  geom_smooth(aes(y=X2),se=FALSE,color="black")+
+  geom_smooth(aes(y=X5),se=FALSE,color="blue")+
+  geom_smooth(aes(y=X7),se=FALSE,color="red")+
+  theme_bw() +
+  theme(text=element_text(size=10,family="Times"),
+        title=element_text(size=10,family="Times"),
+        axis.text.x=element_text(angle=60, size=8, hjust=1, family="Times"),
+        axis.text.y=element_text(size=8, family="Times"),
+        axis.title.x=element_text(vjust=-0.25, size=8, family="Times"),
+        axis.title.y=element_text(vjust=-0.25, size=8, family="Times"),
+        legend.position="bottom", legend.box="vertical", legend.margin=margin(),
+        legend.key = element_rect(fill="white"), legend.background = element_rect(fill=NA),
+        legend.text=element_text(size=8, family="Times"))
+
+```
+
+Or we can get the top words and topics in highest facebook likes? Let's
+do it together
+
+------------------------------------------------------------------------
+
+### 5.3 How to write the matrices to excel to analyze them!
+
+First - top terms
+
+```{r}
+nwords=30 ## however many words you want
+
+# create a container 
+topwords <- mybeta[1:nwords,]
+str(topwords)
+for (i in 1:whitelotus_LDA_40@k) {
+  tempframe <- mybeta[order(-mybeta[,i]),]
+  tempframe <- tempframe[1:nwords,]
+  tempvec<-as.vector(rownames(tempframe))
+  topwords[,i]<-tempvec
+}
+
+rownames(topwords)<-c(1:nwords)
+topwords <- as.data.frame(topwords)
+
+# openxlsx::write.xlsx(topwords,"../data/Lecture9_Topwords.xlsx")
+```
+
+Top texts ----\>
+
+```{r}
+# make theta
+### do this again if you haven't done so above
+# data_short<-data3
+# missing_docs<-setdiff(data3$post_index,whitelotus_LDA_40@documents)
+# length(missing_docs) ### so its the same
+# data_short<-data_short[-which(data_short$post_index %in% missing_docs),]
+
+which(names(data_short) == "text") # text column
+
+meta_theta_df2<-cbind(data_short[which(names(data_short) == "text") ], whitelotus_LDA_40@gamma)
+
+###meta_theta_df2 should have number of topics + 1 (text column) number of columns
+ncol(meta_theta_df2)
+
+# again - how many texts?
+ntext=50
+
+# and loop
+toptexts <- mybeta[1:ntext,]
+for (i in 1:whitelotus_LDA_40@k) {
+  print(i)
+  tempframe <- meta_theta_df2[order(-meta_theta_df2[,i+1]),]
+  tempframe <- tempframe[1:ntext,]
+  tempvec<-as.vector(tempframe[,1])
+  toptexts[,i]<-tempvec
+}
+
+rownames(toptexts)<-c(1:ntext)
+toptexts <- as.data.frame(toptexts)
+
+# openxlsx:: write.xlsx(toptexts,"../data/Lecture9_TopTexts.xlsx")
+
+# save.image("../data/Lecture9_All_Data.Rdata") ### this is how to save your work!! 
+```
+
+Delete all variables before we start the new section
+
+```{r}
+rm(list = ls()) ### REMOVES ALL VARIABLES USE IT WITH CAUTION
+gc() #garbage can to clean your memory
+```
+
+------------------------------------------------------------------------
+
+## 6. STM Model
+
+Structural Topic Modeling (STM) extends traditional topic models (like
+LDA) by allowing you to include document-level metadata (e.g., time,
+publication, author) as covariates that can influence: - Topic
+prevalence: How often topics appear in a document. - Topic content: The
+words used to describe a topic.
+
+We will be using the [`stm` package](https://github.com/bstewart/stm).
+
+### 6.1 Train the STM Model with the optimal topics
+
+Our class example will be our White Lotus Data, and our covariate will
+be year of the posts.
+
+#### 6.1.1 Preprocess Data:
+
+First exact same steps as LDA
+
+```{r}
+load("../data/Lecture9_stm_AllData.Rdata")
+data$post_index <- seq_len(nrow(data)) #my index column
+data$textBU <- data$text # text backup
+data$CLD2<-cld2::detect_language(data$text) ## a package by Google
+table(data$CLD2)
+data2 <- data |>  filter(CLD2=="en")
+data3 <- data2 |> 
+  distinct(text, .keep_all = TRUE)
+
+## add a year column
+
+data3$year <- year(data3$date)
+## make it factorial 
+data3$year <- as.factor(data3$year)
+```
+
+Then we format the data to fit the STM model
+
+```{r}
+processed <- textProcessor(data3$text, metadata = data3)
+out <- prepDocuments(processed$documents, processed$vocab, processed$meta)
+docs <- out$documents
+vocab <- out$vocab
+meta <- out$meta
+```
+
+#### 6.1.2 Finding the Optimal Number of Topics
+
+Choosing the right number of topics (K) is crucial. Too few topics may
+merge distinct themes, while too many may split coherent ideas. In
+`stm`, we use the `searchK()` function to compare multiple models based
+on quantitative criteria:
+
+```{r, eval=FALSE}
+k_result <- searchK(documents = docs, 
+                    vocab = vocab, 
+                    data = meta, 
+                    K = c(5, 10, 15, 20), 
+                    prevalence = ~ year, 
+                    init.type = "Spectral")
+```
+
+```{r}
+plot(k_result)
+```
+
+Also plot:
+
+```{r}
+### i first unlist the results list:
+df_k <- k_result$results |> 
+  mutate(K = unlist(K),
+         exclusivity = unlist(exclus),
+         semantic_coherence = unlist(semcoh))
+
+### then plot
+ggplot(df_k, aes(x = K)) +
+  geom_line(aes(y = exclusivity, color = "Exclusivity"), size = 1) +
+  geom_point(aes(y = exclusivity, color = "Exclusivity"), size = 2) +
+  geom_line(aes(y = semantic_coherence, color = "Semantic Coherence"), size = 1) +
+  geom_point(aes(y = semantic_coherence, color = "Semantic Coherence"), size = 2) +
+  labs(title = "Model Diagnostics: Exclusivity vs Semantic Coherence",
+       x = "Number of Topics (K)",
+       y = "Score",
+       color = "Metric") +
+  theme_minimal()
+
+```
+
+| Metric | Best K | Notes |
+|-----------------|-----------------|---------------------------------------|
+| Held-Out Likelihood | 20 | Increases steadily with K |
+| Residuals | 20 | Decreases steadily, lowest at K = 20 |
+| Semantic Coherence | 5–10 | Highest at K = 5, drops with K, small bump at 20 |
+| Exclusivity | 20 | Increases consistently, highest at K = 20 |
+
+So looks like 20 is the more optimal topic, but we can also try 15
+
+------------------------------------------------------------------------
+
+#### 6.1.2 Fitting the STM Model
+
+```{r, eval=FALSE}
+# K = 15 and K = 20
+stm_k15 <- stm(documents = docs, vocab = vocab, K = 15,
+               prevalence = ~ year, data = meta,
+               init.type = "Spectral", max.em.its = 75)
+
+stm_k20 <- stm(documents = docs, vocab = vocab, K = 20,
+               prevalence = ~ year, data = meta,
+               init.type = "Spectral", max.em.its = 75)
+
+# Label top words
+labelTopics(stm_k15)
+labelTopics(stm_k20)
+```
+
+```{r}
+# save.image("../data/Lecture9_stm_AllData.Rdata")
+```
+
+##### Comparative Plot
+
+```{r}
+# Plot summaries
+par(mfrow = c(1, 2))  # 
+plot(stm_k15, main = "K = 15 Topics")
+plot(stm_k20, main = "K = 20 Topics")
+par(mfrow = c(1, 1))  # reset your plotting area
+
+```
+
+The above 2 panel plot shows the **expected topic proportions** for each
+fitted model: - The x-axis represents how frequently a topic appears
+across the corpus. - Each topic label includes its top 3 words for quick
+interpretation.
+
+##### Key points:
+
+-   K = 15: Topics appear broader and more semantically rich (e.g.,
+    "lisa, blackpink" or "star, white").
+-   K = 20: Some topics are narrower and more specific (e.g., "god,
+    name, also"), but there's visible overlap (e.g., several
+    "car"-related topics).
+
+What do we think?
+
+*I'm going to continue with k=15*
+
+------------------------------------------------------------------------
+
+### 6.2 Interpret the STM Model
+
+#### 6.2.1 Top Words per Topic - The Beta (β) Matrix using Tidy
+
+Very similar to LDA we can use the `tidytext` to get our two matrices
+
+```{r}
+
+WL_STM_topics <- tidy(stm_k15, matrix = "beta")
+head(WL_STM_topics)
+
+WL_STM_top_terms <- WL_STM_topics |> 
+  group_by(topic) |> 
+  top_n(10, beta) |> 
+  ungroup() |> 
+  arrange(topic, -beta)
+
+
+WL_STM_top_terms |> 
+  mutate(term = reorder_within(term, beta, topic)) |> 
+  ggplot(aes(beta, term, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  scale_y_reordered()
+```
+
+We can also identify distinguishing terms between two topics, by
+pivoting wider from topics, computing the logarithmic ratio ---\> which
+tells us how much more a word is associated with topic 2 versus topic 1,
+i.e.,: - log_ratio \> 0 → word is more associated with topic 2 -
+log_ratio \< 0 → word is more associated with topic 1
+
+```{r}
+beta_wide_STM <- WL_STM_topics |> 
+  mutate(topic = paste0("topic", topic)) |> ## add topic before number since you cannot have numeric column names in R
+  pivot_wider(names_from = topic, values_from = beta) |>   # Pivot the data wider: each topic becomes a separate column with its beta
+  filter(topic1 > .001 | topic2 > .001) |> # Keep only rows (terms) that have non-negligible presence in either topic1 or topic2
+  mutate(log_ratio = log2(topic2 / topic1))  # Calculate the log ratio of topic2 to topic1
+
+head(beta_wide_STM)
+```
+
+Visualize it:
+
+```{r}
+
+beta_wide_STM |> 
+  dplyr::filter(log_ratio > -1 & log_ratio < 1) |> ## make the viusalization more readable
+  ggplot( aes(x = log_ratio, y = reorder(term, log_ratio))) +
+  geom_col() +
+  labs(
+    x = "Log2 ratio of beta in topic 2 / topic 1",
+    y = NULL,
+    title = "Terms between Topic 1 and Topic 2"
+  ) +
+  theme_minimal()
+```
+
+#### 6.2.2 Top Words per Topic - The Beta (β) Matrix using Base R
+
+```{r}
+mybetaSTM_log <- stm_k15$beta$logbeta ## these are logged values
+mybetaSTM <- as.data.frame(mybetaSTM_log[[1]])
+# head(mybeta)
+```
+
+Now we need to add column names and row names
+
+```{r}
+# the number of rows in the mybeta matrix
+nrow(mybetaSTM)  # the number of terms in the topic-word distribution matrix
+
+# the number of columns in the mybeta matrix
+ncol(mybetaSTM)  # the number of topics in the model
+
+# assign column names to mybeta using the terms from the LDA model
+colnames(mybetaSTM) <- stm_k15$vocab  # Each column represents a topic, and we label them with the words
+
+# transpose the mybeta matrix so that words become rows and topics become columns
+mybeta <- t(mybetaSTM)
+# apply the exponential function to each element of the matrix
+mybeta <- exp(mybeta)  # Converts log probabilities to actual probability values
+```
+
+We can display using wordcloud:
+
+```{r}
+# Select a topic index for visualization
+i = 4  # Choose a random topic (Topic 4 in this case)
+
+# Create a data frame of words and their probabilities for the selected topic
+wordfreq <- data.frame(word = rownames(mybeta), freq = mybeta[, i])
+
+# Generate a word cloud to visualize word importance in Topic 4
+wordcloud2::wordcloud2(wordfreq)  # Larger words indicate higher probability in the topic
+
+# Apply a transformation to reduce the impact of highly frequent words
+wordfreq <- data.frame(word = rownames(mybeta), freq = (mybeta[, i])^(0.3))  
+# Raising probabilities to the power of 0.3 reduces the range, making less frequent words more visible
+
+# Generate another word cloud with adjusted scaling
+wordcloud2::wordcloud2(wordfreq)  # Helps to balance word size differences
+```
+
+#### 6.2.3 Top Documents per Topic - The Gamma (γ) Matrix using Tidy
+
+```{r}
+WL_STM_documents <- tidy(stm_k15, matrix = "gamma",
+                     document_names = data3$post_index)
+head(WL_STM_documents)
+```
+
+Visualization - we can boxplot according to documents
+
+```{r}
+WL_STM_documents |> 
+  mutate(document = as.numeric(document)) |> 
+  filter(document < 5 & topic < 4) |>  #again for visualization 
+  ggplot(aes(factor(topic), gamma)) +
+  geom_boxplot() +
+  facet_wrap(~ document) +
+  labs(x = "topic", y = expression(gamma))
+
+```
+
+------------------------------------------------------------------------
+
+#### 6.2.4 Top Documents per Topic - The Gamma (γ) Matrix using Base R
+
+Let's combine the gamma values (for STM its the theta column) with our
+main document to have the text and the gamma values
+
+```{r}
+topic_proportions <- as.data.frame(stm_k15$theta)
+colnames(topic_proportions) <- paste0("X", 1:ncol(topic_proportions))
+meta_theta_df_STM <- cbind(meta, topic_proportions)
+
+```
+
+For example, we can do theme by day, and visualize theme by day
+
+```{r}
+meta_theta_daily_STM <- meta_theta_df_STM |> 
+  pivot_longer(cols = starts_with("X"), names_to = "topic", values_to = "gamma") |>
+  group_by(date, topic) |> 
+  summarise(mean_gamma = mean(gamma), .groups = "drop") |> 
+  ungroup()
+
+
+meta_theta_daily_STM |> 
+  filter(topic %in% (
+    meta_theta_daily_STM |> 
+      group_by(topic) |> 
+      summarise(avg = mean(mean_gamma), .groups = "drop") |> 
+      slice_max(order_by = avg, n = 5) |> 
+      pull(topic)
+  )) |> 
+  ggplot(aes(x=date))+
+  geom_col(aes(y=mean_gamma,fill=topic),position = "fill",width = 4)+
+  scale_x_date(date_breaks="2 months", date_labels = "%b-%Y")+
+  xlab("")+
+  ylab("Prevalance")+
+  ggthemes::theme_wsj(color="white")+
+  theme(text=element_text(size=10,family="Times"),
+        title=element_text(size=10,family="Times"),
+        axis.text.x=element_text(angle=60, size=8, hjust=1, family="Times"),
+        axis.text.y=element_text(size=8, family="Times"),
+        axis.title.x=element_text(vjust=-0.25, size=8, family="Times"),
+        axis.title.y=element_text(vjust=-0.25, size=8, family="Times"),
+        legend.position="bottom", legend.box="vertical", legend.margin=margin(),
+        legend.key = element_rect(fill="white"), legend.background = element_rect(fill=NA),
+        legend.text=element_text(size=8, family="Times"))
+
+```
+
+Or another way
+
+```{r}
+
+theme_by_date_STM <- meta_theta_df_STM |> 
+  group_by(date) |> 
+  summarise(across(starts_with("X"), mean))
+
+ggplot(theme_by_date_STM, aes(x=date))+
+  geom_smooth(aes(y=X2),se=FALSE,color="black")+
+  geom_smooth(aes(y=X5),se=FALSE,color="blue")+
+  geom_smooth(aes(y=X7),se=FALSE,color="red")+
+  theme_bw() +
+  theme(text=element_text(size=10,family="Times"),
+        title=element_text(size=10,family="Times"),
+        axis.text.x=element_text(angle=60, size=8, hjust=1, family="Times"),
+        axis.text.y=element_text(size=8, family="Times"),
+        axis.title.x=element_text(vjust=-0.25, size=8, family="Times"),
+        axis.title.y=element_text(vjust=-0.25, size=8, family="Times"))
+
+```
+
+#### 6.2.5 Topic Correlation
+
+Topic Correlation Graph: The topic correlation graph helps us understand
+how topics co-occur across documents.
+
+This visualization comes from `topicCorr()` and shows:
+
+-   **Nodes**: Each node represents a topic.
+
+-   **Edges (dashed lines)**: Statistically significant correlations
+    between topics.
+
+-   **Clusters**: Topics that frequently appear together form tight
+    clusters.
+
+```{r}
+topic_correlation <- topicCorr(stm_k15)  
+
+plot(topic_correlation)
+
+```
+
+1.  Clusters and Connectivity
+    -   One large **dense cluster** connects Topics 1, 2, 5, 7, 8, 10,
+        13, and 15. This suggests these topics are often discussed
+        together — potentially reflecting a shared theme or narrative
+        thread.
+    -   A separate cluster (Topics 4, 6, 14) is more isolated —
+        indicating a more **self-contained discourse**.
+2.  Central Nodes
+    -   **Topic 8** and **Topic 10** are highly connected. These are
+        likely general themes that overlap with many others.
+    -   Such nodes are often **good starting points** for identifying
+        core discourses in the dataset.
+3.  Peripheral Topics
+    -   Topics like **Topic 6** or **Topic 9** are more disconnected,
+        implying they represent **niche** or **specific** themes that
+        don't often mix with the broader conversation.
+
+------------------------------------------------------------------------
+
+#### 6.3 Estimating Covariate Effect
+
+In our case our covariate in our model was year
+
+```{r}
+prep_k15 <- estimateEffect(1:15 ~ year, stm_k15, meta = meta, uncertainty = "Global")
+```
+
+To plot it in ggplot we need to create a dataframe
+
+```{r}
+eff_summary <- summary(prep_k15, topics = 1) # getting the summary
+eff_df <- as.data.frame(eff_summary$tables[[1]]) #getting the first item of the list
+eff_df$year <- rownames(eff_df) #making the year into a column
+
+ggplot(eff_df, aes(x = year, y = Estimate)) +
+  geom_col(fill = "#619CFF") +
+  geom_errorbar(aes(ymin = Estimate - 1.96 * `Std. Error`, 
+                    ymax = Estimate + 1.96 * `Std. Error`), 
+                width = 0.2) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
+  labs(title = "Effect of Year on Topic 1 Prevalence",
+       x = "Year",
+       y = "Estimated Effect") +
+  theme_minimal()
+
+```
+
+-   The bar chart shows how the prevalence of Topic 1 changes across
+    different years, relative to the baseline (Intercept).
+-   The values represent expected differences in topic proportion across
+    years, as estimated by STM's `estimateEffect()` function.
+
+How to interpret this:
+
+-   **(Intercept)**: The baseline prevalence of Topic 1 (corresponds to
+    the first year in your dataframe (check from the factor)). The
+    estimated effect is **positive and significant**.
+
+-   **year2022**: Topic 1 became **less prevalent** compared to the
+    baseline. The **negative estimate** with confidence intervals not
+    crossing 0 suggests this difference is **statistically
+    significant**.
+
+-   **year2023**: Topic 1 remained **less prevalent** than baseline, but
+    the estimate is **closer to zero**, and the CI overlaps with 0 — the
+    effect may **not be significant**.
+
+-   **year2024**: Topic 1 sees a **resurgence** with a positive effect —
+    and the confidence interval suggests this **could be significant**.
+
+-   **year2025**: The effect is **minimal and not significant** (near
+    zero, CI includes 0).
+
+------------------------------------------------------------------------
+
+## Class Exercises
+
+Use the white lotus data, 
+1.  Fit an LDA model with 10 topics using `topicmodels::LDA`.
+
+2.  Fit an STM model with 10 topics using `stm::stm` and include a
+    metadata variable (e.g., `year`).
+
+3.  Use `tidytext::tidy()` to extract top words (`beta`) from both
+    models.
+
+4.  Plot top 5 words per topic using `ggplot2::geom_col()`.
+
+5.  **LDA vs STM**: Compare the top words and documents between the LDA
+    and STM models. What are the key differences in terms of topics and
+    themes?
+6. Extract per-document topic probabilities (`gamma`) for both models.
+   - For LDA: use `tidy(lda_model, matrix = "gamma")`
+   - For STM: use `tidy(stm_model, matrix = "gamma", document_names = meta$post_index)`
+7. Join with metadata (e.g., `year`, `source`) and visualize:
+   - Plot how topic proportions vary over time using `facet_wrap(~ topic)`
+   - Which topics vary most by year?
+  - Are topic trends consistent across models?
+6. **Interpretation**: What do the top words and documents suggest
+    about the underlying themes in the White Lotus dataset?
+    
+---
+
+## Lecture 9 Cheat Sheet
+
+## 🧾 Topic Modeling Cheatsheet (LDA + STM)
+
+| **Function / Concept** | **Description** | **Code Example** |
+|------------------------|-----------------|------------------|
+| `unnest_tokens()` | Tokenizes text into individual words. | `tokens <- data |> unnest_tokens(word, text)` |
+| `anti_join(stop_words)` | Removes common stopwords. | `tokens <- tokens |> anti_join(stop_words)` |
+| `cast_dtm()` | Converts tidy text to Document-Term Matrix. | `dtm <- tokens |> count(doc_id, word) |> cast_dtm(doc_id, word, n)` |
+| `LDA()` | Fits Latent Dirichlet Allocation model. | `lda_model <- LDA(dtm, k = 20)` |
+| `tidy(matrix = "beta")` | Word-topic probabilities for LDA or STM. | `beta <- tidy(lda_model, matrix = "beta")` |
+| `tidy(matrix = "gamma")` | Document-topic proportions. | `gamma <- tidy(stm_model, matrix = "gamma", document_names = meta$post_index)` |
+| `ggplot() + facet_wrap()` | Visualizes top words per topic. | `top_terms |> ggplot(aes(beta, term)) + geom_col() + facet_wrap(~ topic)` |
+| `FindTopicsNumber()` | Finds optimal number of LDA topics. | `FindTopicsNumber(dtm, topics = 5:30, metrics = c("Griffiths2004"))` |
+| `textProcessor()` | Cleans and tokenizes text for STM. | `processed <- textProcessor(data$text, metadata = data)` |
+| `prepDocuments()` | Prepares documents, vocab, metadata for STM. | `out <- prepDocuments(processed$documents, processed$vocab, processed$meta)` |
+| `stm()` | Fits STM with or without metadata covariates. | `stm_model <- stm(documents, vocab, K = 15, prevalence = ~ year, data = meta)` |
+| `labelTopics()` | Displays top words per STM topic. | `labelTopics(stm_model)` |
+| `searchK()` | Evaluates STM model fit for multiple K. | `searchK(documents, vocab, K = c(5, 10, 15), data = meta)` |
+| `stm_model$theta` | Accesses gamma (document-topic proportions). | `theta <- stm_model$theta` |
+| `stm_model$beta` | Accesses log-prob topic-word matrix. | `beta_log <- stm_model$beta[[1]]; beta <- exp(as.matrix(beta_log))` |
+| `estimateEffect()` | Estimates topic prevalence by metadata. | `eff <- estimateEffect(1:10 ~ year, stm_model, meta)` |
+| `summary()` on `estimateEffect` | Extracts estimated effects and CIs. | `summary(eff, topics = 1)$tables$year |> as.data.frame()` |
+| `ggplot() + geom_col()` | Plots estimated topic effects by group. | `ggplot(eff_df, aes(x = year, y = Estimate)) + geom_col()` |
+| `topicCorr()` | Calculates topic-topic correlation network. | `tc <- topicCorr(stm_model); plot(tc)` |
+| `setdiff()` | Finds dropped documents from preprocessing. | `setdiff(data3$post_index, meta$post_index)` |
+
