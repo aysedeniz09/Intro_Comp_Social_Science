@@ -137,7 +137,8 @@ data3 <- data2 |>
 
 ```{r}
 mystopwords<-c(stopwords("en"),stopwords(source = "smart"),
-               "thewhitelotus")
+               "thewhitelotus", "series", "hbo", "https",
+               "season", "show", "shows") # you can add more stopwords here
 
 mystopwords <- unique(mystopwords)
 mystopwords <- tolower(mystopwords)
@@ -246,13 +247,13 @@ it yourself at home!*
 
 ```{r, eval=FALSE}
 
-mycores<-detectCores()-2 # we are leaving 2 cores of your computer free so you can run a processor
+mycores <- parallel::detectCores()-2 # we are leaving 2 cores of your computer free so you can run a processor
 # we will try several k's (sequence from 5 to 100)
 
 Sys.time()
 result <- FindTopicsNumber(
   full_data,
-  topics = seq(5,100,by=5), # Specify how many topics you want to try.
+  topics = seq(5,200,by=5), # Specify how many topics you want to try.
   metrics = c("Griffiths2004", "CaoJuan2009", "Arun2010", "Deveaud2014"),
   method = "Gibbs",
   control = list(seed = 3333),
