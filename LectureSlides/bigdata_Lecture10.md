@@ -112,7 +112,8 @@ modeling.
 
 ``` r
 # Load the data
-data <- read.csv("../data/david_bowie_lyrics_clean3.csv", stringsAsFactors = FALSE)
+load("../data/Lecture10_Data.Rdata")
+# data <- read.csv("../data/david_bowie_lyrics_clean3.csv", stringsAsFactors = FALSE)
 
 ########################################################################
 ### I already cleaned all of this — left it here so you can see below ###
@@ -475,7 +476,7 @@ the dataset is sufficiently large and high-dimensional.
 Sys.time()
 ```
 
-    ## [1] "2025-04-01 14:46:35 EDT"
+    ## [1] "2025-04-06 19:34:45 EDT"
 
 ``` r
 svm.train <- train(outcome ~ ., data = data_train,
@@ -487,7 +488,7 @@ svm.train <- train(outcome ~ ., data = data_train,
 Sys.time()
 ```
 
-    ## [1] "2025-04-01 14:46:49 EDT"
+    ## [1] "2025-04-06 19:34:58 EDT"
 
 ------------------------------------------------------------------------
 
@@ -508,6 +509,18 @@ noise. - Provides a measure of feature importance.
 
 Decision Trees:
 
+- Is a type of supervised machine learning model used for classification
+  and regression. It works by learning decision rules inferred from
+  features in the training data.
+
+- The structure looks like a tree:
+
+  - it starts at a root node, splits into branches based on feature
+    conditions, and ends at leaf nodes with predicted outcomes.
+
+- Each node in the tree represents a decision based on a feature and a
+  threshold
+
 ``` r
 m <- rpart(outcome ~ ., data = data_out,
            method = "class")
@@ -516,6 +529,66 @@ rpart.plot(m)
 
 ![](bigdata_Lecture10_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
+In our case:
+
+- *This first split is the most informative feature for classifying the
+  target - in our casewhether a song or instance is “pre90” or “post90”*
+
+- Root node (the top one) - Ramona
+
+  - Feature: `ramona >= 1`
+
+  - If yes: go left
+
+  - If no: go right
+
+- Internal Nodes
+
+  - E.g., node: `days >= 1`
+
+    - Label prediction: `pre90`
+
+    - Probability: e.g., `0.51` (confidence)
+
+    - Percentage of data in that node: e.g., `60%`
+
+  - What does this all mean?
+
+    - 60% of the samples reach this node
+
+    - Predicts the class `pre90` with 51% confidence
+
+- Leaf Nodes (Bottom)
+
+  - *The final predictions -* these nodes don’t split anymore—they are
+    the model’s final prediction
+
+    - Dark blue = `post90`, dark green = `pre90`
+
+- Path Example
+
+<!-- -->
+
+    -   Let’s follow a path from root to leaf:
+
+        -   `ramona >= 1` → **no** → go right\
+        -   `cos < 1` → **yes** → go left\
+        -   `left < 1` → **yes** → go left\
+        -   `makes < 1` → **yes** → go left\
+        -   `blue < 1` → **yes** → go left\
+        -   `told < 1` → **yes** → go left\
+        -   `times < 1` → **yes** → go left\
+        -   `find < 1` → **yes** → go left\
+        -   `people < 1` → **yes** → go left\
+        -   `lay < 1` → **yes** → go left\
+        -   `real >= 1` → **no** → go right
+
+    -   Prediction: `post90`, probability = 0.42, 29% of data
+
+    -   This means a sample that follows this exact path is predicted to
+        be from post-1990, with 42% confidence, and 29% of the training
+        data went through this same path.
+
 Now train:
 
 ``` r
@@ -523,7 +596,7 @@ Now train:
 Sys.time()
 ```
 
-    ## [1] "2025-04-01 14:46:52 EDT"
+    ## [1] "2025-04-06 19:35:01 EDT"
 
 ``` r
 rf.train <- train(outcome ~ ., data = data_train,
@@ -535,7 +608,7 @@ rf.train <- train(outcome ~ ., data = data_train,
 Sys.time()
 ```
 
-    ## [1] "2025-04-01 14:47:02 EDT"
+    ## [1] "2025-04-06 19:35:11 EDT"
 
 ``` r
 plot(rf.train)
@@ -564,7 +637,7 @@ independence assumption, it can perform quite well on text data.
 Sys.time()
 ```
 
-    ## [1] "2025-04-01 14:47:02 EDT"
+    ## [1] "2025-04-06 19:35:11 EDT"
 
 ``` r
 nbayes.train <- train(outcome ~ ., data = data_train,
@@ -576,7 +649,7 @@ nbayes.train <- train(outcome ~ ., data = data_train,
 Sys.time()
 ```
 
-    ## [1] "2025-04-01 14:47:12 EDT"
+    ## [1] "2025-04-06 19:35:19 EDT"
 
 ``` r
 # Stop parallel processing
@@ -584,7 +657,7 @@ stopCluster(cls)
 ```
 
 ``` r
-save.image("../data/Lecture10_Data.Rdata")
+# save.image("../data/Lecture10_Data.Rdata")
 ```
 
 ------------------------------------------------------------------------
@@ -970,8 +1043,8 @@ gc() #garbage can to clean your memory
 ```
 
     ##           used  (Mb) gc trigger  (Mb) limit (Mb) max used  (Mb)
-    ## Ncells 3328162 177.8    5310625 283.7         NA  5310625 283.7
-    ## Vcells 5759930  44.0   62889293 479.9      18432 65442355 499.3
+    ## Ncells 3327281 177.7    5310627 283.7         NA  5310627 283.7
+    ## Vcells 5758618  44.0   63673114 485.8      18432 79591392 607.3
 
 ------------------------------------------------------------------------
 
@@ -1308,7 +1381,7 @@ ggplot(df_compare, aes(x = actual, y = residual)) +
       regression model.  
     - Generate a **ggplot** scatter plot of **Predicted vs. Actual**
       (with a reference line `y = x`).  
-    - Add a **Residual Plot** (`residual = predicted - actual`) vs. the
+    - Add a **Residual Plot** (`residual = predicted - actual`) vs. the
       **actual** outcome.  
     - Briefly interpret any patterns you notice in the residuals (e.g.,
       do they fan out, suggesting heteroscedasticity?).

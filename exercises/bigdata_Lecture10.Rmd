@@ -128,7 +128,7 @@ modeling.
 
 ```{r}
 # Load the data
-load("../data/Lecture10.Data.Rdata")
+load("../data/Lecture10_Data.Rdata")
 # data <- read.csv("../data/david_bowie_lyrics_clean3.csv", stringsAsFactors = FALSE)
 
 ########################################################################
@@ -432,12 +432,83 @@ noise. - Provides a measure of feature importance.
 
 Decision Trees:
 
+-   Is a type of supervised machine learning model used for
+    classification and regression. It works by learning decision rules
+    inferred from features in the training data.
+
+-   The structure looks like a tree:
+
+    -   it starts at a root node, splits into branches based on feature
+        conditions, and ends at leaf nodes with predicted outcomes.
+
+-   Each node in the tree represents a decision based on a feature and a
+    threshold
+
 ```{r}
 
 m <- rpart(outcome ~ ., data = data_out,
            method = "class")
 rpart.plot(m)
 ```
+
+In our case:
+
+-   *This first split is the most informative feature for classifying
+    the target - in our casewhether a song or instance is “pre90” or
+    “post90”*
+
+-   Root node (the top one) - Ramona
+
+    -   Feature: `ramona >= 1`
+
+    -   If yes: go left
+
+    -   If no: go right
+
+-   Internal Nodes
+
+    -   E.g., node: `days >= 1`
+
+        -   Label prediction: `pre90`
+
+        -   Probability: e.g., `0.51` (confidence)
+
+        -   Percentage of data in that node: e.g., `60%`
+
+    -   What does this all mean?
+
+        -   60% of the samples reach this node
+
+        -   Predicts the class `pre90` with 51% confidence
+
+-   Leaf Nodes (Bottom)
+
+    -   *The final predictions -* these nodes don't split anymore—they
+        are the model’s final prediction
+
+        -   Dark blue = `post90`, dark green = `pre90`
+
+-    Path Example
+
+    -   Let’s follow a path from root to leaf:
+
+        -   `ramona >= 1` → **no** → go right\
+        -   `cos < 1` → **yes** → go left\
+        -   `left < 1` → **yes** → go left\
+        -   `makes < 1` → **yes** → go left\
+        -   `blue < 1` → **yes** → go left\
+        -   `told < 1` → **yes** → go left\
+        -   `times < 1` → **yes** → go left\
+        -   `find < 1` → **yes** → go left\
+        -   `people < 1` → **yes** → go left\
+        -   `lay < 1` → **yes** → go left\
+        -   `real >= 1` → **no** → go right
+
+    -   Prediction: `post90`, probability = 0.42, 29% of data
+
+    -   This means a sample that follows this exact path is predicted to
+        be from post-1990, with 42% confidence, and 29% of the training
+        data went through this same path.
 
 Now train:
 
@@ -492,7 +563,7 @@ stopCluster(cls)
 ```
 
 ```{r}
-save.image("../data/Lecture10_Data.Rdata")
+# save.image("../data/Lecture10_Data.Rdata")
 ```
 
 ------------------------------------------------------------------------
@@ -646,7 +717,7 @@ bwplot(results.cv)
 ```
 
 | **Panel** | **Metric** | **Description** |
-|--------------|--------------|--------------------------------------------|
+|----------------|----------------|----------------------------------------|
 | ROC | Area Under the Curve (AUC) | Combines sensitivity and specificity. Higher values indicate better classification. |
 | Sens | Sensitivity (Recall) | Proportion of actual `post90` correctly identified. |
 | Spec | Specificity | Proportion of actual `pre90` correctly identified. |
@@ -877,7 +948,6 @@ rf_model
 
 ```
 
-
 ```{r}
 # Stop parallel processing
 stopCluster(cls)
@@ -1014,42 +1084,58 @@ ggplot(df_compare, aes(x = actual, y = residual)) +
   theme_minimal()
 ```
 
------
+------------------------------------------------------------------------
 
 ## CLASS EXERCISES
 
-1. **Cross Validation and Model Comparison**  
-   - Fit two classification models (**Random Forest** and **Naive Bayes**) on your dataset, using `caret::train()` with `method = "cv"`, `number = 5`.  
-   - Compare their cross-validated **accuracy**, **sensitivity**, and **specificity** using `resamples()` or by printing `model$results`.  
-   - Discuss which model performed best and why.  
+1.  **Cross Validation and Model Comparison**
+    -   Fit two classification models (**Random Forest** and **Naive
+        Bayes**) on your dataset, using `caret::train()` with
+        `method = "cv"`, `number = 5`.\
+    -   Compare their cross-validated **accuracy**, **sensitivity**, and
+        **specificity** using `resamples()` or by printing
+        `model$results`.\
+    -   Discuss which model performed best and why.
+2.  **Imbalanced Classes**
+    -   Check the distribution of your outcome variable (e.g.,
+        `table(data$outcome)`).\
+    -   If your dataset is imbalanced, apply a **simple oversampling**
+        strategy (duplicate minority-class examples) to your training
+        set.\
+    -   Retrain the Random Forest and evaluate on the original,
+        **unmodified** test set. Compare the new recall and precision
+        for the minority class against the old results.
+3.  **Regression Analysis**
+    -   Convert your outcome variable to **numeric** (e.g., `score` or
+        `mpg`) if it is not already.\
+    -   Fit a **Random Forest** regression model with
+        `trainControl(method = "cv", number = 5)`.\
+    -   Obtain **RMSE** and **R²** using `postResample()`. Interpret
+        what these values say about your model’s fit.
+4.  **Residual Diagnostics**
+    -   Create a data frame with `actual` and `predicted` values from
+        your regression model.\
+    -   Generate a **ggplot** scatter plot of **Predicted vs. Actual**
+        (with a reference line `y = x`).\
+    -   Add a **Residual Plot** (`residual = predicted - actual`) vs.
+        the **actual** outcome.\
+    -   Briefly interpret any patterns you notice in the residuals
+        (e.g., do they fan out, suggesting heteroscedasticity?).
+5.  **Decision Tree Visualization**
+    -   Using `rpart(outcome ~ ., data = data_train, method = "class")`,
+        fit a **single** decision tree classifier (where `outcome` is a
+        factor).\
+    -   Plot it using `rpart.plot()`.\
+    -   Identify the top 2-3 splits in the tree and explain how each
+        split is partitioning the data. Do these splits make intuitive
+        sense based on your domain knowledge?
 
-2. **Imbalanced Classes**  
-   - Check the distribution of your outcome variable (e.g., `table(data$outcome)`).  
-   - If your dataset is imbalanced, apply a **simple oversampling** strategy (duplicate minority-class examples) to your training set.  
-   - Retrain the Random Forest and evaluate on the original, **unmodified** test set. Compare the new recall and precision for the minority class against the old results.  
-
-3. **Regression Analysis**  
-   - Convert your outcome variable to **numeric** (e.g., `score` or `mpg`) if it is not already.  
-   - Fit a **Random Forest** regression model with `trainControl(method = "cv", number = 5)`.  
-   - Obtain **RMSE** and **R²** using `postResample()`. Interpret what these values say about your model’s fit.  
-
-4. **Residual Diagnostics**  
-   - Create a data frame with `actual` and `predicted` values from your regression model.  
-   - Generate a **ggplot** scatter plot of **Predicted vs. Actual** (with a reference line `y = x`).  
-   - Add a **Residual Plot** (`residual = predicted - actual`) vs. the **actual** outcome.  
-   - Briefly interpret any patterns you notice in the residuals (e.g., do they fan out, suggesting heteroscedasticity?).  
-
-5. **Decision Tree Visualization**  
-   - Using `rpart(outcome ~ ., data = data_train, method = "class")`, fit a **single** decision tree classifier (where `outcome` is a factor).  
-   - Plot it using `rpart.plot()`.  
-   - Identify the top 2-3 splits in the tree and explain how each split is partitioning the data. Do these splits make intuitive sense based on your domain knowledge?  
-
------
+------------------------------------------------------------------------
 
 ## Leture 10 Cheat Sheet
 
 | **Function/Concept** | **Description** | **Code Example** |
-|---------------|------------------------------------|---------------------|
+|------------------|-----------------------------------|--------------------|
 | **`createDataPartition()`** (caret) | Splits data into training and test (or validation) sets while preserving the distribution of the outcome. | `r<br>set.seed(123)<br>train_index <- createDataPartition(data_out$outcome, p = 0.8, list = FALSE)<br>data_train <- data_out[train_index, ]<br>data_test  <- data_out[-train_index, ]` |
 | **`trainControl()`** (caret) | Defines the resampling method (e.g., k-fold cross validation), performance metrics, and other parameters for training. | `r<br>control <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)` |
 | **`train()`** (caret) | Trains a model (classification or regression) using the specified method (e.g., `"rf"`, `"svmLinear"`, `"naive_bayes"`), resampling scheme, and tuning parameters. | `r<br>rf_model <- train(outcome ~ ., data = data_train, method = "rf", trControl = control, preProc = c("center","scale"), metric = "ROC")` |
