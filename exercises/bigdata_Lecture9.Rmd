@@ -641,7 +641,7 @@ for (i in 1:whitelotus_LDA_40@k) {
   print(i)
   tempframe <- meta_theta_df2[order(-meta_theta_df2[,i+1]),]
   tempframe <- tempframe[1:ntext,]
-  tempvec<-as.vector(tempframe[,1])
+  tempvec<-as.vector(unlist(tempframe[,1]))
   toptexts[,i]<-tempvec
 }
 
@@ -694,6 +694,10 @@ data2 <- data |>  filter(CLD2=="en")
 data3 <- data2 |> 
   distinct(text, .keep_all = TRUE)
 
+data_removed <- anti_join(data2, data3)
+
+nrow(data2) - nrow(data3)
+
 ## add a year column
 
 data3$year <- year(data3$date)
@@ -723,7 +727,7 @@ k_result <- searchK(documents = docs,
                     vocab = vocab, 
                     data = meta, 
                     K = c(5, 10, 15, 20), 
-                    prevalence = ~ year, 
+                    prevalence = ~ year + fb_data.total_engagement_count, 
                     init.type = "Spectral")
 ```
 
@@ -777,9 +781,12 @@ stm_k20 <- stm(documents = docs, vocab = vocab, K = 20,
                prevalence = ~ year, data = meta,
                init.type = "Spectral", max.em.its = 75)
 
+
+
 # Label top words
 labelTopics(stm_k15)
 labelTopics(stm_k20)
+
 ```
 
 ```{r}
@@ -1060,6 +1067,7 @@ In our case our covariate in our model was year
 
 ```{r}
 prep_k15 <- estimateEffect(1:15 ~ year, stm_k15, meta = meta, uncertainty = "Global")
+summary(prep_k15)
 ```
 
 To plot it in ggplot we need to create a dataframe

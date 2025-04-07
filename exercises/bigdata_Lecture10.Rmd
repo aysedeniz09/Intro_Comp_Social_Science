@@ -454,7 +454,7 @@ rpart.plot(m)
 In our case:
 
 -   *This first split is the most informative feature for classifying
-    the target - in our casewhether a song or instance is “pre90” or
+    the target - in our case whether a song or instance is “pre90” or
     “post90”*
 
 -   Root node (the top one) - Ramona
@@ -488,27 +488,29 @@ In our case:
 
         -   Dark blue = `post90`, dark green = `pre90`
 
--    Path Example
+-   Path Example
 
-    -   Let’s follow a path from root to leaf:
+```         
+-   Let’s follow a path from root to leaf:
 
-        -   `ramona >= 1` → **no** → go right\
-        -   `cos < 1` → **yes** → go left\
-        -   `left < 1` → **yes** → go left\
-        -   `makes < 1` → **yes** → go left\
-        -   `blue < 1` → **yes** → go left\
-        -   `told < 1` → **yes** → go left\
-        -   `times < 1` → **yes** → go left\
-        -   `find < 1` → **yes** → go left\
-        -   `people < 1` → **yes** → go left\
-        -   `lay < 1` → **yes** → go left\
-        -   `real >= 1` → **no** → go right
+    -   `ramona >= 1` → **no** → go right\
+    -   `cos < 1` → **yes** → go left\
+    -   `left < 1` → **yes** → go left\
+    -   `makes < 1` → **yes** → go left\
+    -   `blue < 1` → **yes** → go left\
+    -   `told < 1` → **yes** → go left\
+    -   `times < 1` → **yes** → go left\
+    -   `find < 1` → **yes** → go left\
+    -   `people < 1` → **yes** → go left\
+    -   `lay < 1` → **yes** → go left\
+    -   `real >= 1` → **no** → go right
 
-    -   Prediction: `post90`, probability = 0.42, 29% of data
+-   Prediction: `post90`, probability = 0.42, 29% of data
 
-    -   This means a sample that follows this exact path is predicted to
-        be from post-1990, with 42% confidence, and 29% of the training
-        data went through this same path.
+-   This means a sample that follows this exact path is predicted to
+    be from post-1990, with 42% confidence, and 29% of the training
+    data went through this same path.
+```
 
 Now train:
 
@@ -717,7 +719,7 @@ bwplot(results.cv)
 ```
 
 | **Panel** | **Metric** | **Description** |
-|----------------|----------------|----------------------------------------|
+|-----------------|-----------------|--------------------------------------|
 | ROC | Area Under the Curve (AUC) | Combines sensitivity and specificity. Higher values indicate better classification. |
 | Sens | Sensitivity (Recall) | Proportion of actual `post90` correctly identified. |
 | Spec | Specificity | Proportion of actual `pre90` correctly identified. |
@@ -1135,7 +1137,7 @@ ggplot(df_compare, aes(x = actual, y = residual)) +
 ## Leture 10 Cheat Sheet
 
 | **Function/Concept** | **Description** | **Code Example** |
-|------------------|-----------------------------------|--------------------|
+|------------------|----------------------------------|--------------------|
 | **`createDataPartition()`** (caret) | Splits data into training and test (or validation) sets while preserving the distribution of the outcome. | `r<br>set.seed(123)<br>train_index <- createDataPartition(data_out$outcome, p = 0.8, list = FALSE)<br>data_train <- data_out[train_index, ]<br>data_test  <- data_out[-train_index, ]` |
 | **`trainControl()`** (caret) | Defines the resampling method (e.g., k-fold cross validation), performance metrics, and other parameters for training. | `r<br>control <- trainControl(method = "cv", number = 10, classProbs = TRUE, summaryFunction = twoClassSummary)` |
 | **`train()`** (caret) | Trains a model (classification or regression) using the specified method (e.g., `"rf"`, `"svmLinear"`, `"naive_bayes"`), resampling scheme, and tuning parameters. | `r<br>rf_model <- train(outcome ~ ., data = data_train, method = "rf", trControl = control, preProc = c("center","scale"), metric = "ROC")` |
